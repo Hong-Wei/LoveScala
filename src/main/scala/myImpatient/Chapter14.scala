@@ -21,15 +21,15 @@ object Chapter14 extends App {
   }
 
 
-  for {
-    1 <- 1 to 10
-    name <- ch match {
-      case '+' => Option(1)
-    }
-    a = 5
+//  for {
+//    1 <- 1 to 10
+//    name <- ch match {
+//      case '+' => Option(1)
+//    }
+//    a = 5
 
 
-  } yield 1
+//  } yield 1
 
 
 
