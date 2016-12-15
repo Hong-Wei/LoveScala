@@ -314,7 +314,7 @@ import org.scalatest.tagobjects.Slow
 class ExampleSpec extends FlatSpec {
 
   "The Scala language" must "add correctly" taggedAs(Slow) in {
-    val sum = 1 + 1
+    val sum = 1 +   1
     assert(sum === 2)
   }
 
