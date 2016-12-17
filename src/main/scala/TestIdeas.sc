@@ -1,8 +1,3 @@
-var capital =Map("US"->"Washington","France"->"Paries")
-capital += ("Japan"-> "Tokeyo")
-println(capital("France"))
+val doc = <html><head><title>Fred's Memoirs</title></head><body>...</body></html>
 
-def factoial (x:BigInt):BigInt =
-  if(x==0) 1 else x*factoial( x -1)
-
-factoial(30)
+val items = <li>Fred</li><li>Wilma</li>

@@ -8,9 +8,9 @@ import java.io.File
 object  C1 extends App {
 
   val doc = <html><head><title>Fred's Memoirs</title></head><body>...</body></html>
-  val items = <li>Fred</li><li>Wilma</li>
-  print(2)
+  val items = <li>Fred</li><li>Wilma</li>;
 
+  print(123)
 
 }
 object Chapter16 extends App {
@@ -47,7 +47,7 @@ object Chapter16 extends App {
 }
 
 //bk 16.4 Embedded Expressions
-object ViewBounds174 extends App {
+object C4 extends App {
 
   // <% means T can be converted to a Comparable[T] through an implicit conversion.
   //  class Pair[T <% Comparable[T]]
@@ -67,7 +67,7 @@ object ViewBounds174 extends App {
 //bk 16.5 Expressions in Attributes
 //T<% V requires the existence of an implicit conversion from T to V.
 //T:M requires that there is an “implicit value” of type M[T].
-object ContextBounds175 extends App {
+object C5 extends App {
 
   //  class MyPair[T : Ordering] //an implicit value of type Ordering[T]
   class MyPair[T: Ordering](val first: T, val second: T) {
@@ -83,7 +83,7 @@ object ContextBounds175 extends App {
 // If you write a generic function that constructs a generic array,
 // you need to help it out and pass that manifest object.
 // Since it’s an implicit parameter of the constructor, you can use a context bound,
-object ManifestContextBounds176 extends App {
+object C6 extends App {
   //T:Manifest requires that there is an “implicit value” of type Manifest[T].
   def makePair[T: Manifest](first: T, second: T): Unit = {
     val r = new Array[T](2);
@@ -105,7 +105,7 @@ object ManifestContextBounds176 extends App {
 // you can have many view bounds : T <% Comparable[T] <% String
 // can many context bounds: T :Ordering :Manifest
 
-object MultipleBounds177 extends App {
+object C7 extends App {
 
 }
 
@@ -115,7 +115,7 @@ object MultipleBounds177 extends App {
 // T <:< U --> T is a subtype of U
 // T <%< U --> T is view-convertible to U
 // you need “implicit evidence parameter"
-object ManifestContextBounds178 extends App {
+object C8 extends App {
 
   //eg 1
   class MyPair[T](val first: T, val second: T)(implicit ev: T <:< Ordered[T]) {}
@@ -154,7 +154,7 @@ object ManifestContextBounds178 extends App {
 
 //bk 16.9 Modifying Elements and Attributes
 //[+T] The + means that the type is covariant in T—it varies in the same direction.
-object ManifestContextBounds179 extends App {
+object C9 extends App {
 
   // problem1:
   //  def makeFriends(p: Pair[Person])
@@ -173,16 +173,16 @@ object ManifestContextBounds179 extends App {
 }
 
 //bk 16.10 Transforming XML —
-object ManifestContextBounds1710 extends App {
+object C10 extends App {
 
 }
 
 //bk 16.11 Loading and Saving
-object ManifestContextBounds1711 extends App {
+object C11 extends App {
 }
 
 //bk 16.12 Namespaces
-object ManifestContextBounds1712 extends App {
+object C12 extends App {
 // def process(people : java.util.List[_ <: Person]){} // scala
 //  void processJava(Pair <? extends Person> people){} // java
 }
