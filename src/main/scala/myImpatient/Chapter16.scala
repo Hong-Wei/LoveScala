@@ -1,4 +1,4 @@
-package myImpatient
+package myImpatient.chapter16
 
 import java.io.File
 
@@ -8,19 +8,39 @@ import java.io.File
 object  C1 extends App {
 
   val doc = <html><head><title>Fred's Memoirs</title></head><body>...</body></html>
+
   val items = <li>Fred</li><li>Wilma</li>;
 
-  print(123)
+  val (x, y) = (1, 2)
+  x < y // OK
+  x<y // OK
+//  x <y // Error—unclosed XML literal
 
 }
+//BK 16.2 XML Nodes
+object C2 extends App{
+
+  //Elem describes an XML elements.
+  val elem = <a href="http://scala-lang.org">The <em>Scala</em> language</a>
+
+  for (n <- elem.child) {
+    println(n.getClass.getName + ": " + n)
+  }
+
+//  val elem = <p><!-- a comment -->)&anEntityRef;<?a processing instruction ?></p>
+//
+//  for (n <- elem.child) {
+//    println(n.getClass.getName + ": " + n)
+//  }
+//
+//  import scala.xml._
+//
+//  val items = new NodeBuffer
+//  items += <li>Fred</li>
+//  items += <li>Wilma</li>
+//  val nodes: NodeSeq = items
+}
 object Chapter16 extends App {
-
-  //BK 16.2 XML Nodes
-  //  def getMiddle[T](a: Array[T]): T = a(a.length / 2)
-  //  // infer the types
-  //  getMiddle(Array("Mary","had","a","little","lamb"))
-  //  val f = getMiddle[String] _
-
   //BK 16.3 Element Attributes
   //  //  place restrictions on type variables
   //  //   T <: Comparable is the upper bound, T must be the sub class of Comparable
