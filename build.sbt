@@ -18,6 +18,7 @@ libraryDependencies ++= {
       "container,compile" artifacts Artifact("javax.servlet", "jar", "jar"),
     "org.scalactic" %% "scalactic" % "3.0.1",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
-    "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5"
+    "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5",
+    "com.typesafe.akka" %% "akka-actor" % "2.4.17"
   )
 }
