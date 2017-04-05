@@ -5,6 +5,7 @@ import java.io.File
 //BK 16 XML Processing 18=227-245
 
 //BK 16.1 XML Literals
+
 object  C1 extends App {
 
   val doc = <html><head><title>Fred's Memoirs</title></head><body>...</body></html>
