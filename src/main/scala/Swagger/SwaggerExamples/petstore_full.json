@@ -732,16 +732,13 @@
       "properties": {
         "id": {
           "type": "integer",
-          "format": "int64",
-          "example": 5
+          "format": "int64"
         },
         "username": {
-          "type": "string",
-          "example": "hongwei"
+          "type": "string"
         },
         "firstName": {
-          "type": "string",
-          "example": "hongwei"
+          "type": "string"
         },
         "lastName": {
           "type": "string"

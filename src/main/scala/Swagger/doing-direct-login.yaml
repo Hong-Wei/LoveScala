@@ -34,7 +34,7 @@ security:
     - basic
   - key: []
   - internalApiKey: []
-  
+#  DirectLogin token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIiOiIifQ.rxBhwrn7B9AU1vTlKAHK8Mjfyc1_DPn3KJSWL4QPCdY"
 paths:
   /users/current:
     get:

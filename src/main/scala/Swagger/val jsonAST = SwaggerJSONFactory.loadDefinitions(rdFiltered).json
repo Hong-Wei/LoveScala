@@ -1,0 +1,32 @@
+{
+  "definitions": {
+    "BankJSON": {
+      "required": [
+        "id",
+        "short_name",
+        "full_name",
+        "logo",
+        "website"
+      ],
+      "properties": {
+        "website": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "short_name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
+
+
