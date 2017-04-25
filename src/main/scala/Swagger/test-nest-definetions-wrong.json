@@ -1,0 +1,185 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Open Bank Project API",
+    "description": "An Open Source API for Banks. (c) TESOBE Ltd. 2011 - 2016. Licensed under the AGPL and commercial licences.",
+    "contact": {
+      "name": "TESOBE Ltd. / Open Bank Project",
+      "url": "https://openbankproject.com"
+    },
+    "version": "v2.1.0"
+  },
+  "host": "apisandbox.openbankproject.com",
+  "basePath": "/obp/v2.1.0",
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "securityDefinitions": {
+    "directLogin": {
+      "type": "apiKey",
+      "description": "http://openbankproject.com",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "security": [
+    {
+      "directLogin": []
+    }
+  ],
+  "paths": {
+    "/users/current/{BANK_ID}}": {
+      "get": {
+        "security": [
+          {
+            "directLogin": []
+          }
+        ],
+        "tags": [
+          "1_2_1"
+        ],
+        "summary": "Get accounts at all banks (Authenticated + Anonymous access).",
+        "description": "<p>Returns the list of accounts at that the user has access to at all banks. For each account the API returns the account ID and the available views.</p><p>If the user is not authenticated via OAuth, the list will contain only the accounts providing public views. If the user is authenticated, the list will contain non-public accounts to which the user has access, in addition to all public accounts.</p><p>Note for those upgrading from v1.2: The v1.2 version of this call was buggy in that it did not include public accounts if an authenticated user made the call. If you need the previous behaviour, please use the API call for private accounts (..../accounts/private).</p>",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "BANK_ID",
+            "description": "The name that needs to be fetched. Use user1 for testing.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/v210/BasicViewJSON"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "V210":{
+      "BasicViewJSON": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      },
+      "BasicViewJSONV210": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      },
+      "BasicViewJSON3": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      }
+    },
+    "V220":{
+      "BasicViewJSON": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      },
+      "BasicViewJSON2": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      },
+      "BasicViewJSON3": {
+        "properties": {
+          "is_public": {
+            "type": "boolean",
+            "example": "true"
+          },
+          "short_name": {
+            "type": "string",
+            "example": " HHH"
+          },
+          "id": {
+            "type": "string",
+            "example": " 1"
+          }
+        }
+      }
+    }
+  }
+}

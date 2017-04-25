@@ -265,11 +265,11 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Activity'
-  Error:
+  :
     type: object
     properties:
       code:
-        type: integer
+     Error   type: integer
         format: int32
       message:
         type: string
