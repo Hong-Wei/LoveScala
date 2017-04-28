@@ -54,9 +54,48 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "Success"
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/BasicViewJSON"
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/ErrorHostnameNotSpecified"
+            }
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BasicViewJSON": {
+      "properties": {
+        "is_public": {
+          "type": "boolean",
+          "example": "true"
+        },
+        "short_name": {
+          "type": "string",
+          "example": " HHH"
+        },
+        "id": {
+          "type": "string",
+          "example": " 1"
+        }
+      }
+    },
+    "ErrorHostnameNotSpecified": {
+      "properties": {
+        "Name": {
+          "type": "string",
+          "example": "OBP-00001: Hostname not specified. Could not get hostname from Props. Please edit your props file. "
+        },
+        "Detail": {
+          "type": "string",
+          "example": "OBP-00001: Hostname not specified. Could not get hostname from Props. Please edit your props file. "
         }
       }
     }
