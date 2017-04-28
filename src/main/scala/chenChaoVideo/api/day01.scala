@@ -7,54 +7,56 @@ package chenChaoVideo.api
 import myImpatient.Chapter1
 
 object Basic {
+  //CM 1 define the method, with the default input value
   def hello(name: String = "Scala"): String = {
     "Hello:" + name
   }
 
+  //CM 2 Define the method, without the parameters. the pathnesses can be ommited.
+  //def helloScala{
   def helloScala() {
     printf("hello Scala!")
   }
 
+  //CM 3 define the method, with two paramters.
   def add = (x: Int, y: Int) => x + y;
 
+  //CM 4 you can use the curring to define the method.
   def add2(x: Int)(y: Int) = x + y;
 
   def add3(x: Int)(y: Int)(z: Int) = x + y + z;
 
-  def printEveryChar(c: String*) {
+  //CM 5 used the multiply input *, mean many input string values.
+  // and the * must be in the last one.
+  def printEveryChar(a: Int, c: String*) {
     c.foreach(x => println(x))
   }
 
-  var add1 = (x: Int, y: Int) => x + y;
 
   def main(args: Array[String]): Unit = {
-    //    mynumber
-    val chapter: Chapter1 = new Chapter1
-    chapter.myClass
-
     println(hello("hongwei"))
     println(hello())
     println(helloScala())
-    println(helloScala) // if there is not parameter in method, so it is
+    println(helloScala) //No paramters in the input, the partheness can be omitted
+
     println(add(1, 2))
-    println(add1(1, 2))
     println(add2(1)(2))
     println(add3(1)(2)(3))
-    printEveryChar("abc", "bac", "def")
+    printEveryChar(5, "abc", "bac", "def")
 
     val x = 1
     val a = if (x > 0) 1 else 0
 
-    var (n, r) = (10, 0)
+    //CM 6 define multiply variables at the same time
+    var (n, r, stringValue) = (10, 0, "Sting")
     while (n > 0) {
       r = r + n
       n = n - 1
     }
     println(r)
 
-    //   for(i <- 1 to 10){ //1.to(10)==> 1 to 10
-    for (i <- 1.to(10)) {
-      //1.to(10)==> 1 to 10
+    // 1 to 10 == 1.to(10)
+    for (i <- 1 to 10) {
       print(i)
     }
     println()
@@ -62,24 +64,43 @@ object Basic {
     for (i <- 1 until (10)) {
       print(i)
     }
-
+    //CM 7 use the filter in for expression
     for (i <- 1 to 10 if i % 2 == 0) {
       print(i + " ")
     }
+    val p = new Person
+    //    p.name = "jack"
+    println(p.name + ":" + p.age)
+
+    //    val p2 = new Person2("Jack", 2)
+    //    println(":" + p2.age)
+    //    val p3 = new Person2("Jack", 3, "male")
+    //    println(": " + p3.age + p3.gender)
+    //
+    //    val s = new Student("hongwei", 20, "math")
+    //    val s1 = new Student("hongwei", 20, "math", "male")
+    //    println(s1.toString())
+    //    val p1 = new Person1("hongwei", 12)
+    //    p1.age
+    //    p1.name
+
+    case class Person1(name: String, age: Int) {}
 
   }
 }
 
 import scala.math._
 
+//CM 8 define the class
 class Person {
+  //CM 8.1 define with var, it will create the get and set method, and  _: place holder, initialise the name to null.
   var name: String = _
-  // _:place holder: getter and setter
-  val age = pow(10, 100)
-  //only getter
+  //CM 8.2 define with val only getter
+  val age = pow(10, 2)
+  
   private[this] val gender = "male"
 
-  // only inside the class ,not outside
+  // only inside the class, not outside
   def main(args: Array[String]): Unit = {
     val age = sqrt(2)
     val age1 = min(10, 100)
@@ -116,32 +137,6 @@ class Student(name: String, age: Int, val major: String) extends Person2(name, a
 
   var school1 = "xiaoxue"
 }
-
-object Basic2 {
-
-  def main(args: Array[String]): Unit = {
-    val p = new Person
-    p.name = "jack"
-    println(p.name + ":" + p.age)
-
-    val p2 = new Person2("Jack", 2)
-    println(":" + p2.age)
-    val p3 = new Person2("Jack", 3, "male")
-    println(": " + p3.age + p3.gender)
-
-    val s = new Student("hongwei", 20, "math")
-    val s1 = new Student("hongwei", 20, "math", "male")
-    println(s1.toString())
-    val p1 = new Person1("hongwei", 12)
-    p1.age
-    p1.name
-  }
-
-  case class Person1(name: String, age: Int) {}
-
-
-}
-
 
 
 
