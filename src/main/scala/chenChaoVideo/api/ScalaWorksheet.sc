@@ -1,3 +1,3 @@
-import scala.collection.immutable.Seq
-val inclusive: Seq[Int] = 1 to 10 
-val range: Seq[Int] = 1 until 10 
+
+val tuple1 = "hongwei" -> 23
+val stringToInt: Map[String, Int] = Map("hongwei" -> 23)
