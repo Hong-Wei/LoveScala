@@ -1,0 +1,45 @@
+{
+  "definitions": {
+    "ExampleJSON": {
+      "required": [
+        "id",
+        "name",
+        "bank",
+        "banks"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Tesobe": {
+          "type": "string"
+        },
+        "bank": {
+          "$ref": "#/definitions/BankJSON"
+        },
+        "banks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BanksJSON"
+          }
+        }
+      }
+    }
+  }
+}
+
+
+//*         {
+//*           "required": ["id","name","bank","banks"],
+//*           "properties":
+//*           {
+//*             "id": {"type":"integer", "format":"int32"},
+//*             "Tesobe": {"type":"string"},
+//*             "bank": {"$ref": "#/definitions/BankJSON"},
+//*             "banks": {"type": "array", "items":{"$ref": "#/definitions/BanksJSON"}}
+//*         }
+
+
+
+

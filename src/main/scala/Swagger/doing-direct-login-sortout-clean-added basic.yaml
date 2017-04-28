@@ -1,0 +1,58 @@
+swagger: '2.0'
+info:
+  title: Open Bank Project API
+  description: An Open Source API for Banks. (c) TESOBE Ltd. 2011 - 2016. Licensed under the AGPL and commercial licences.
+  contact:
+    name: TESOBE Ltd. / Open Bank Project
+    url: 'https://openbankproject.com'
+  version: v2.1.0
+host: 'apisandbox.openbankproject.com'
+basePath: /obp/v2.1.0
+schemes:
+  - https
+  - http
+
+securityDefinitions:
+  oauth2:
+    type: oauth2
+#    Authorization: Bearer 
+#  must contain the bearer in the head, so wired there.
+    flow: implicit
+    authorizationUrl: https://apisandbox.openbankproject.com/oauth/initiate
+    scopes:
+      basic: |
+       to read any and all data related to a user (e.g. following/followed-by
+        lists, photos, etc.) (granted by default)
+
+  directLogin:
+    type: apiKey
+    in: header
+    description: https://github.com/OpenBankProject/OBP-API/wiki/Direct-Login
+    name: Authorization
+  myLogin:
+    type: basic
+#    GET --header 'Accept: application/json' --header 'Authorization: Basic c3VzYW4udWsuMjlAZXhhbXBsZS5jb206MmI3OGU4' 'https://apisandbox.openbankproject.com/obp/v2.1.0/users/current'
+# looks no useful, just add basic there, so wired 
+security:
+  - oauth2:
+    - basic
+  - directLogin: []
+  - myLogin: []
+  
+paths:
+  /users/current:
+    get:
+      security:
+        - directLogin: []
+        - myLogin: []
+        - oauth2:  
+          - basic
+      tags:
+        - '1_2_1'
+      summary: Get accounts at all banks (Authenticated + Anonymous access).
+      description: '<p>Returns the list of accounts at that the user has access to at all banks. For each account the API returns the account ID and the available views.</p><p>If the user is not authenticated via OAuth, the list will contain only the accounts providing public views. If the user is authenticated, the list will contain non-public accounts to which the user has access, in addition to all public accounts.</p><p>Note for those upgrading from v1.2: The v1.2 version of this call was buggy in that it did not include public accounts if an authenticated user made the call. If you need the previous behaviour, please use the API call for private accounts (..../accounts/private).</p>'
+      produces:
+              - application/json
+      responses:
+        '200':
+          description: Success

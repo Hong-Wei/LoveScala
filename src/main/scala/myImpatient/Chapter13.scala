@@ -23,6 +23,11 @@ object MainCollectionsTraits1 extends App {
   while (iter.hasNext)
     println(iter.next())
 
+  // Seq is an ordered sequence of values: Array or List. IndexSeq allows fast random access through an integer index. ArrayBuffer is indexed ,but linked list is not .
+  // Set is an unordered collection of values.
+  // Map is a set of (key,value) pairs.
+
+
   // uniform creation principle
   // eg2: each Scala collection contain a companion object with aplly method, to create the instance!
   private val ints: Iterable[Int] = Iterable(0xFF, 0xFF00, 0xFF0000)

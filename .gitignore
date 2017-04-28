@@ -13,7 +13,7 @@ project/
 .project
 .cache
 target
-src/main/resources/
+#src/main/resources/
 src/test/resources/
 *.iml
 src/main/scala/ProgrammingInScala/
@@ -44,5 +44,5 @@ project/plugins/project/
 project/project/
 sbt
 sbt-launch-0.13.8.jar
-src/main/scala/code/comet/
-src/main/scala/code/view/
+src/main/scala/chenChaoVideo/comet/
+src/main/scala/chenChaoVideo/view/

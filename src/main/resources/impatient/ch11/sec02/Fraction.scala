@@ -1,6 +1,5 @@
 package impatient.ch11.sec02
 
-import scala.collection.immutable.Range.Inclusive
 import scala.math._
 
 class Fraction(n: Int, d: Int) {
@@ -17,12 +16,10 @@ class Fraction(n: Int, d: Int) {
 }
 
 object Main extends App {
+
   val f1 = new Fraction(3, 4)
   val f2 = new Fraction(2, 5)
   println(f1 * f2)
-
-  //  private val tuple: (Int, Int) = 1 -> 10
-  //  private val inclusive: Inclusive = 1to10
-  //  private val to: Inclusive = 1.to(10)
-
+  private val ints: List[Int] = 1 :: 2 :: Nil
+  ints.mkString
 }

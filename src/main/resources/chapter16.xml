@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>A List</title>
+    </head>
+    <body>
+        <ul>
+            <li>Fred</li>
+            <li>Wilma</li>
+        </ul>
+    </body>
+</html>
+
+<html>
+<head>
+    <title>A List</title>
+</head>
+<body>
+    <ol>
+        <li>Fred</li>
+        <li>Wilma</li>
+    </ol>
+</body>
+</html>
+
+<html>
+<head>
+    <title>A List</title>
+</head>
+<body>
+    <ol>
+        <li>Frog</li>
+        <li>Wilma</li>
+    </ol>
+</body>
+</html>
