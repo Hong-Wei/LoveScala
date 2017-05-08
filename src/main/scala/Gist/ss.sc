@@ -1,14 +1,14 @@
-trait TransactionRequestCommonBodyJSON1 {
-  val value : String
-  val description: String
+class A {
+  private var sum = 0
+
+  def add(b: Byte): Unit = {
+
+    sum += b
+  }
+  
 }
 
-// the common parts of four types
-// note: there is TransactionRequestCommonBodyJSON trait, so this case class call TransactionRequestBodyCommonJSON
-case class TransactionRequestBodyCommonJSON(
-  value: String,
-  description: String,
-  description2: String
-) extends TransactionRequestCommonBodyJSON1
+val accc = new A
+accc
 
-TransactionRequestBodyCommonJSON("1","2","3")
+
