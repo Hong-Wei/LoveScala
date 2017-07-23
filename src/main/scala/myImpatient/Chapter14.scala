@@ -1,7 +1,7 @@
 package myImpatient
 
-import impatient.ch14.sec09._
-import myImpatient.CaseClasses.Currency
+//import impatient.ch14.sec09._
+//import myImpatient.CaseClasses.Currency
 
 import scala.collection.immutable.IndexedSeq
 

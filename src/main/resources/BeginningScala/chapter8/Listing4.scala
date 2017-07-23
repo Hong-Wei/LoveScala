@@ -1,1 +1,0 @@
-val list : List[String] = List("A", "B", "C")

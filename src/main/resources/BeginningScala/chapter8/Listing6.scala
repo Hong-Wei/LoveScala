@@ -1,1 +1,0 @@
-def test(s: Set[AnyRef]) {}

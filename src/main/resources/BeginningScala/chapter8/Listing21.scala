@@ -1,1 +1,0 @@
-implicit def oToT[T](in: Option[T]): T = in.get

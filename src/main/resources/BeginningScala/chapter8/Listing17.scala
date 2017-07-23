@@ -1,1 +1,0 @@
-def employeeName [A <: Employee](emp: A) { println(emp.name) }

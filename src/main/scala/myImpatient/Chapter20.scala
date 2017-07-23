@@ -19,7 +19,7 @@ object Main extends App {
   helloActor ! "喂"
 }
 
-
+ 
 
 import akka.actor._
 
