@@ -46,3 +46,64 @@ object Government {
 
 }
 
+
+
+//https://segmentfault.com/a/1190000009455103
+//1.flatMap
+//我们可以利用flatMap来组合多个Future，不多说，先上代码：
+val fut1 = Future {
+  println("enter task1")
+  Thread.sleep(2000)
+  1 + 1
+}
+
+val fut2 = Future {
+  println("enter task2")
+  Thread.sleep(1000)
+  2 + 2
+}
+
+fut1.flatMap { v1 =>
+  fut2.map { v2 =>
+    println(s"the result is ${v1 + v2}")
+  }
+}
+Thread.sleep(2500)
+
+//2.for yield表达式
+for {
+  v1 <- fut1
+  v2 <- fut2
+} yield 
+  println(s"the result is ${v1 + v2}")
+
+
+//https://stackoverflow.com/questions/24028114/getting-data-out-of-a-future-in-scala
+
+
+//There are multiple ways:
+
+//fut1.map { personList =>
+//    ....
+//  }
+////This map returns another Future composed with whatever you return from the map. The map will execute only if the future completes successfully. If you need to handle failure you can use onComplete
+//
+//fut1.onComplete {
+//  case Success(personList) => ...
+//  case Failure(exception)  =>  ...
+//}
+////Or you can wait for the future to complete (this is blocking):
+//
+//val personList: List[Person] = Await.result(fut1, 1 minutes)
+
+
+
+//https://blog.knoldus.com/2016/07/01/getting-asynchronous-in-scala-part-1-future-callbacks-combinators-etc/https://blog.knoldus.com/2016/07/01/getting-asynchronous-in-scala-part-1-future-callbacks-combinators-etc/
+//1). Callbacks
+//2). Combinators
+//3). For Comprehensive
+//4). Await.result
+//5). The async library (async,await)
+
+//https://blog.knoldus.com/2016/07/13/the-async-library-in-scala/
+
