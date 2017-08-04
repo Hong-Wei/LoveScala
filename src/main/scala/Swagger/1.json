@@ -1,45 +1,52 @@
 {
-  "definitions": {
-    "ExampleJSON": {
-      "required": [
-        "id",
-        "name",
-        "bank",
-        "banks"
-      ],
-      "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "Tesobe": {
-          "type": "string"
-        },
-        "bank": {
-          "$ref": "#/definitions/BankJSON"
-        },
-        "banks": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BanksJSON"
-          }
-        }
-      }
+  "fromAccountBankId": "10",
+  "fromAccountId": "tKWSUBy6sha3Vhxc_vw9OK96a0RprtoxUuObMYR29TI",
+  "transactionRequestType": "PHONE_TO_PHONE",
+  "transactionChargePolicy": "SHARED",
+  "transactionRequestCommonBody": {
+    "from_account_phone_number": "+9722398746",
+    "value": {
+      "currency": "ILS",
+      "amount": "1"
+    },
+    "description": "ABC",
+    "charge_policy": "SHARED",
+    "couterparty": {
+      "other_account_owner": "TOM",
+      "other_account_owner_birthday": "19900810",
+      "other_account_phone_number": "+9722398746"
     }
-  }
+  },
+  "toCounterpartyId": "",
+  "toCounterpartyName": "",
+  "toCounterpartyCurrency": "ILS",
+  "toCounterpartyRoutingAddress": "",
+  "toCounterpartyRoutingScheme": "",
+  "toCounterpartyBankRoutingAddress": "",
+  "toCounterpartyBankRoutingScheme": ""
 }
 
-
-//*         {
-//*           "required": ["id","name","bank","banks"],
-//*           "properties":
-//*           {
-//*             "id": {"type":"integer", "format":"int32"},
-//*             "Tesobe": {"type":"string"},
-//*             "bank": {"$ref": "#/definitions/BankJSON"},
-//*             "banks": {"type": "array", "items":{"$ref": "#/definitions/BanksJSON"}}
-//*         }
-
-
-
-
+{
+  "transactionRequestType": "SANDBOX_TAN",
+  "toCounterpartyRoutingAddress": "1234",
+  "toCounterpartyBankRoutingScheme": "OBP",
+  "fromAccountId": "8ca8a7e4-6d02-48e3-a029-0b2bf89de9f0",
+  "transactionChargePolicy": "RECEIVER",
+  "toCounterpartyId": "1234",
+  "toCounterpartyRoutingScheme": "OBP",
+  "toCounterpartyBankRoutingAddress": "12345",
+  "toCounterpartyName": "obp",
+  "toCounterpartyCurrency": "EUR",
+  "transactionRequestCommonBody": {
+    "TransactionRequestBodyCounterpartyJSON": {
+      "hongwei": "hongwei",
+      "charge_policy": "SHARED",
+      "description": "A description for the transaction to the counterparty",
+      "value": {
+        "amount": "1000",
+        "currency": "EUR"
+      }
+    }
+  },
+  "fromAccountBankId": "gh.29.uk"
+}
