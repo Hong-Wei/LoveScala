@@ -8,6 +8,8 @@ scalaVersion := "2.11.8"
 
 seq(webSettings: _*)
 
+//resolvers += Resolver.sonatypeRepo("releases")
+
 libraryDependencies ++= {
   val liftVersion = "2.6-RC1"
   Seq(
@@ -19,6 +21,11 @@ libraryDependencies ++= {
     "org.scalactic" %% "scalactic" % "3.0.1",
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5",
-    "com.typesafe.akka" %% "akka-actor" % "2.4.17"
+    "com.typesafe.akka" %% "akka-actor" % "2.4.17"//,
+//    "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M4"
   )
 }
+
+
+
+ 
