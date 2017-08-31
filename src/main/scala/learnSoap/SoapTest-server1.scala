@@ -1,4 +1,4 @@
-package learnSoap
+package learnSoap.t1
 
 //http://wiki.summercode.com/a_trivial_soap_client_in_scala
 //This is test the server: http://www.webservicex.net/globalweather.asmx?op=GetCitiesByCountry
@@ -56,24 +56,9 @@ object SoapTest {
     }
   }
   
-//  def doTest2 {
-//    val host = "http://ws.cdyne.com/WeatherWS/Weather.asmx"
-//    val req  = <GetCityForecastByZIP xmlns="http://ws.cdyne.com/WeatherWS/">
-//      <ZIP>77058</ZIP>
-//    </GetCityForecastByZIP>
-//    val cli = new SoapClient
-//    println("##### request:\n" + cli.wrap(req))
-//    val resp = cli.sendMessage(host, req)
-//    if (resp.isDefined) {
-//      println("##### response:\n")
-//      (resp.get  \\ "Forecast").foreach(elem => {
-//        println("#########\n" + elem.toString)
-//      })
-//    }
-//  }
+
   
   def main(args: Array[String]) {
     doTest1
-//    doTest2
   }
 }
