@@ -44,7 +44,7 @@ object client  extends App{
       import akka.http.scaladsl.Http
       import akka.http.scaladsl.model._
       import akka.stream.ActorMaterializer
-  import scala.concurrent.ExecutionContext.Implicits.global
+      import akka.http.scaladsl.model.headers.RawHeader
 
       import scala.concurrent.Future
 
@@ -53,11 +53,15 @@ object client  extends App{
 
       val responseFuture: Future[HttpResponse] =
         Http().singleRequest(HttpRequest(
-          uri = "http://localhost:8084/hello"))
+          uri = "http://localhost:8084/hello")
+          .withHeaders(RawHeader("X-CSRF-TOKEN", "")
+          )
+        )
   
 
-  responseFuture.onComplete {
-    case Success(e) => print(e)
-    case Failure(e) =>  print(e)
-  }
+      import scala.concurrent.ExecutionContext.Implicits.global
+      responseFuture.onComplete {
+        case Success(e) => print(e)
+        case Failure(e) =>  print(e)
+      }
 }
