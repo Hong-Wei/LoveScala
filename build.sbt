@@ -23,7 +23,12 @@ libraryDependencies ++= {
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
     "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5",
     "com.typesafe.akka" %% "akka-actor" % "2.4.17",//,
-    "com.h2database" % "h2" % "1.4.187"
+    "com.h2database" % "h2" % "1.4.187",
+    // For Akka 2.4.x or 2.5.x
+    "com.typesafe.akka" %% "akka-http" % "10.0.10",
+  // Only when running against Akka 2.5 explicitly depend on akka-streams in same version as akka-actor
+  "com.typesafe.akka" %% "akka-stream" % "2.5.4" ,// or whatever the latest version is
+  "com.typesafe.akka" %% "akka-actor"  % "2.5.4" // or whatever the latest version is
 //    "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M4"
   )
 }
