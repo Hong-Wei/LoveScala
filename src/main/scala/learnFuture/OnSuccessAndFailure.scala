@@ -1,6 +1,6 @@
 //https://alvinalexander.com/scala/concurrency-with-scala-futures-tutorials-examples
 package learnFuture
-import Until._
+import Cloud._
 import scala.concurrent.{Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Random

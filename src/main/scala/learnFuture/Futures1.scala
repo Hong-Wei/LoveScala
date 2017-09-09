@@ -1,6 +1,6 @@
 //https://alvinalexander.com/scala/concurrency-with-scala-futures-tutorials-examples
 package learnFuture
-import Until._
+import Cloud._
 
 // 1 - the imports
 import scala.concurrent.{Await, Future}
@@ -24,18 +24,22 @@ object Futures1 extends App {
 
   // 2 - create a Future
   val f: Future[Int] = Future {
-    sleep(500)
+    sleep(100)
     1 + 1
   }
 
   // 3 - this is blocking (blocking is bad)
-  val result = Await.result(f, 600 millisecond)
-  val result2 = Await.result(f, 600 millisecond)
-  val result3 = Await.result(f, 600 millisecond)
-  val result4 = Await.result(f, 600 millisecond)
+  /*
+     Await is what is used to ensure proper handling of blocking for Awaitable instances. 
+     While occasionally useful, e.g. for testing, 
+     it is recommended that you avoid Await when possible 
+     1> in favor of callbacks and 
+     2> combinators like onComplete and 
+     3> use in for comprehensions. 
+     
+     Await will block the thread on which it runs, and could cause performance and deadlock issues
+   */
+  val result = Await.result(f, 100 millisecond)
   println(result)
-  println(result2)
-  println(result3)
-  println(result4)
   sleep(1000)
 }
