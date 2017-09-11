@@ -1,6 +1,5 @@
 //https://alvinalexander.com/scala/concurrency-with-scala-futures-tutorials-examples
-package learnFuture
-import Cloud._
+package learnFuture.page1_cookbook
 
 // 1 - the imports
 import scala.concurrent.{Await, Future}
@@ -13,7 +12,7 @@ import scala.concurrent.duration._
 // import statement imports the “default global execution context.” 
 // You can think of an execution context as being a thread pool, and this is a simple way to get access to a thread pool.
 import scala.concurrent.ExecutionContext.Implicits.global
-
+import learnFuture.page1_cookbook.Cloud._
 
 /**
   * Created by zhanghongwei on 27.05.17.

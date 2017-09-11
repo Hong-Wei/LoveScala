@@ -1,11 +1,11 @@
 //https://alvinalexander.com/scala/concurrency-with-scala-futures-tutorials-examples
-package learnFuture
-import Cloud._
+package learnFuture.page1_cookbook
 
 // 1 - the imports
-import scala.concurrent.{Await, Future, future}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
+import learnFuture.page1_cookbook.Cloud._
 
 //Creating a method to return a Future[T]
 object Futures2 extends App {

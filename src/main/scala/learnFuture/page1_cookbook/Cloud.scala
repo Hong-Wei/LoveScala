@@ -1,7 +1,7 @@
-package learnFuture
+package learnFuture.page1_cookbook
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
   * Created by zhanghongwei on 28/07/2017.
@@ -16,7 +16,8 @@ object Cloud {
   }
   def runException (number : Int)= Future {
     sleep(100)
-    println(1/0)
+    println(number)
+    1/0
     number
   }
 }

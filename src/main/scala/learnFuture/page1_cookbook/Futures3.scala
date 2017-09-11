@@ -1,13 +1,12 @@
 //https://alvinalexander.com/scala/concurrency-with-scala-futures-tutorials-examples
-package learnFuture
+package learnFuture.page1_cookbook
 
-import learnFuture.Cloud._
-
+import learnFuture.page1_cookbook.Cloud._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-object RunningMultipleCalcs extends App {
+object Futures3 extends App {
   println("starting futures")
   val result1 = Cloud.runAlgorithm(10)
   val result2 = Cloud.runAlgorithm(20)
