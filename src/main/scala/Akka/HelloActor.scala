@@ -118,12 +118,12 @@ object Example_01 extends App{
   import akka.event.Logging
   import akka.actor.ActorSystem
   import akka.actor.Props
-
+  import akka.pattern.Patterns._
   class MyActor extends Actor {
     val log = Logging(context.system, this)
 
     def receive = {
-      case "test" => log.info("received test")
+      case "test" => Future("asdf ") pipeTo sender
       case _      => log.info("received unknown message")
     }
   }
