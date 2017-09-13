@@ -9,7 +9,7 @@ case class Address(street: String, city: Option[String])
 case class Person(name: String, address: Address)
 
 
-object  Person extends App{
+object Person1 extends App{
   implicit val formats = net.liftweb.json.DefaultFormats
   val  fred = parse("""
 { "name": "joe",

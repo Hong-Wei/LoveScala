@@ -91,6 +91,10 @@ object BK4 extends App{
 
   getErrors((compact(render(Extraction.decompose(aa)))))
 
+  //1 case class -->JValue --> String -->Kafka -->String --> JValue --> Case class.
+  
+  
+  
 
 }
 
