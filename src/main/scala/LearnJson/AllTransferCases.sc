@@ -24,11 +24,12 @@ case class InBoundCaseClass(
                             )
 
 
-val oneCaseClass: OutBoundCaseClass = OutBoundCaseClass("cbsToken", List(InternalCaseClass("text")), List(""))
+var oneCaseClass: OutBoundCaseClass = OutBoundCaseClass("cbsToken", List(InternalCaseClass("text")), List(""))
+val twoCaseClass: InternalCaseClass = InternalCaseClass("text")
 
 
 //1case class -->JValue
-val classToJValue: JValue = Extraction.decompose(oneCaseClass)
+val classToJValue: JValue = Extraction.decompose(twoCaseClass)
 
 //2 JValue -->String
 //2.1 JValue -->Document first.
@@ -48,5 +49,6 @@ val stringToJValue: JValue = parse(jValueToStringCompact)
 
 //4.0 JValue --> Case Class
 val jvalueToCaseClass: InBoundCaseClass = Extraction.extract[InBoundCaseClass](stringToJValue)
+val jvalueToCaseClass2: InBoundCaseClass = Extraction.extract[InBoundCaseClass](parse("{\n  \"1\":\"2\"\n}"))
 
 

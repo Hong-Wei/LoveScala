@@ -19,8 +19,8 @@ case class OutBoundCaseClass(
 case class InBoundCaseClass(
                              oneMore: Option[String], 
                              cbsToken: Option[String], 
-                             backendMessages: List[InternalCaseClass], 
-                             owners: List[String]
+                             backendMessages: Option[List[InternalCaseClass]], 
+                             owners: Option[List[String]]
                             )
 
 

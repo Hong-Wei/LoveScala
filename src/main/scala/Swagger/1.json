@@ -1,32 +1,3 @@
 {
-  "authInfo": {
-    "userId": "02e16eba-7bfd-4b71-b537-98b0d0a4d2fe",
-    "username": "tobias",
-    "cbsToken": "cbsToken"
-  },
-  "data": [
-    {
-      "errorCode": "noerrorcode",
-      "cbsToken": "nocbstoken",
-      "bankId": "10",
-      "branchId": "nobranchId",
-      "accountId": "ZVHnFMrm_qdQbcrwbrKer7gaA5sPkFltO-zJZzS2Njc",
-      "accountNumber": "2000070466",
-      "accountType": "no",
-      "balanceAmount": "noBalance",
-      "balanceCurrency": "noCurrency",
-      "owners": [
-        "02e16eba-7bfd-4b71-b537-98b0d0a4d2fe"
-      ],
-      "viewsToGenerate": [
-        "Owner"
-      ],
-      "bankRoutingScheme": "noroutingscheme",
-      "bankRoutingAddress": "noroutingaddress",
-      "branchRoutingScheme": "nobranchroutingscheme",
-      "branchRoutingAddress": "nobranchroutingaddress",
-      "accountRoutingScheme": "noroutingscheme",
-      "accountRoutingAddress": "noroutingaddress"
-    }
-  ]
+  "1":"2"
 }
