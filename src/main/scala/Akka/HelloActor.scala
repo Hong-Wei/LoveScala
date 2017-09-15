@@ -104,7 +104,7 @@ object test extends App {
     throw new NullPointerException("null ...")
   }
   value.getOrElse("hongwei")
-  
+
   "hello"(4)
   "hello".apply(4)
   BigInt("1234567890")
@@ -118,12 +118,12 @@ object Example_01 extends App{
   import akka.event.Logging
   import akka.actor.ActorSystem
   import akka.actor.Props
-  import akka.pattern.Patterns._
+
   class MyActor extends Actor {
     val log = Logging(context.system, this)
 
     def receive = {
-      case "test" => Future("asdf ") pipeTo sender
+      case "test" => log.info("received test")
       case _      => log.info("received unknown message")
     }
   }
@@ -209,7 +209,7 @@ object Example_01 extends App{
   myactor!"test"
   myactor!"test"
   myactor!"test"
-  
+
   myactor2! 123
   myactor2! 123
   myactor2! 123
@@ -261,5 +261,5 @@ object Example_01 extends App{
   myactor! 123
   myactor! 123
   //关闭ActorSystem，停止程序的运行
-//  system.shutdown()
+  //  system.shutdown()
 }
