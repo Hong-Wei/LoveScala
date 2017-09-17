@@ -1,4 +1,4 @@
-object Names {
+object Names{
   def unapplySeq(name: String): Option[(String, String, Seq[String])] = {
     val names: Seq[String] = name.trim.split(" ")
     if (names.size < 2) None
