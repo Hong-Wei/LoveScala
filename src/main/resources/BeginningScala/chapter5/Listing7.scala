@@ -1,1 +1,0 @@
-val anyList= List(1, "A", 2, 2.5, 'a')

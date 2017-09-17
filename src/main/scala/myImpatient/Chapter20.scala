@@ -19,7 +19,7 @@ object Main extends App {
   helloActor ! "喂"
 }
 
-
+ 
 
 import akka.actor._
 
@@ -55,7 +55,7 @@ class Pong extends Actor {
     case StopMessage =>
       println("pong stopped")
       context.stop(self)
-      context.system.shutdown()
+//      context.system.shutdown()
   }
 }
 

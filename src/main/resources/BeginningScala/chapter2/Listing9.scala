@@ -1,1 +1,0 @@
-var books:Array[String] = new Array[String](3)

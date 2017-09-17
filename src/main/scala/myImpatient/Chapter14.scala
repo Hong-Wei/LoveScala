@@ -1,7 +1,7 @@
 package myImpatient
 
-import impatient.ch14.sec09._
-import myImpatient.CaseClasses.Currency
+//import impatient.ch14.sec09._
+//import myImpatient.CaseClasses.Currency
 
 import scala.collection.immutable.IndexedSeq
 
@@ -235,6 +235,39 @@ object InfixNotationInCaseClauses extends App {
 object MatchingNestedStructures extends App{
 
 }
+
+//bk 14.14 Sealed Classes
+//All subclasses of a sealed class must be defined in the same file as the class itself.
+//It is a good idea for all case classes to extend a sealed class or trait.
+//如果子类都明确的情况下，为了防止继承滥用，为抽象类添加sealed。
+//sealed 关键字主要有2个作用：
+//
+//其修饰的trait，class只能在当前文件里面被继承
+//用sealed修饰这样做的目的是告诉scala编译器在检查模式匹配的时候，让scala知道这些case的所有情况，scala就能够在编译的时候进行检查，看你写的代码是否有没有漏掉什么没case到，减少编程的错误。
+
+
+sealed abstract class Amount 
+case class Dollar(value: Double) extends Amount 
+case class Currency(value: Double, unit: String) extends Amount
+
+object Test14 extends App{
+  abstract class People
+  case object American extends People
+  case object Japanese extends People
+  case object Chinese extends People
+  case object Russia extends People
+
+  def people(p: People) = p match {
+    case American ⇒ println("American person")
+    case Japanese ⇒ println("Japanese person")
+    case Chinese ⇒ println("Chinese person")
+  }
+
+  // Exiting paste mode, now interpreting.
+
+  
+}
+
 
 //bk 14.16 The Option Type
 object Option16 extends App {

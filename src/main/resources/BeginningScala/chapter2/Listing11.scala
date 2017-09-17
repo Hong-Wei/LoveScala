@@ -1,1 +1,0 @@
-var books = Array("Beginning Scala", "Beginning Java", "Beginning Groovy")
