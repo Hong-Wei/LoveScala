@@ -1,47 +1,33 @@
-//1 for loop, can have multiple generators of the form i<- expression
-var sum =0 
-val a: Unit = for (
-  i <- 1 to 3;
-  j <- 1 to 3
-) sum = sum + 1
+import akka.actor._
+import akka.pattern.ask
+import akka.util.Timeout
+import scala.concurrent.{Await, Future}
+import scala.language.postfixOps
+import scala.concurrent.duration._
 
-sum
+case object AskNameMessage
 
-//This basic for loop, no yield part. it only has the side affect. 
-//it return the Unit 
-// if you want to get value from this, you need extra var to set and get values.
+class TestActor extends Actor {
+  def receive = {
+    case AskNameMessage => // respond to the 'ask' request
+      sender ! "Fred"
+    case _ => println("that was unexpected")
+  }
+}
+object AskDemo extends App{
+  //create the system and actor
+  val system = ActorSystem("AskDemoSystem")
+  val myActor = system.actorOf(Props[TestActor], name="myActor")
 
+  // (1) this is one way to "ask" another actor for information
+  implicit val timeout = Timeout(5 seconds)
+  val future: Future[Any] = myActor ? AskNameMessage
+  val result: String = Await.result(future, 1 second).asInstanceOf[String]
+  println(result)
 
-//2
+  // (2) a slightly different way to ask another actor for information
+  val future2: Future[String] = ask(myActor, AskNameMessage).mapTo[String]
+  val result2: String = Await.result(future2, 1 second)
+  println(result2)
 
-//BK 
-for (
-  i <- 1 to 3;
-  j <- 1 to 3
-)
-  print((10 * i + j) + " ")
-
-for(i<-Some(5))
-  print(i)
-for (i <- 1 to 3; j <- 1 to 3 if i != j)
-  print((10 * i + j) + " ")
-
-val a6 = for {
-  i <- 1 to 10
-  if i > 5
-  a7 = 1000
-
-} yield {
-  1
-  i
-  a7
-  1 to 10
-} // for {} yield {} 是 for 推导式.与第一个生成器的类型兼容!
-
-
-val a7 = for (c <- "Hello"; i <- 0 to 1) yield (c + i).toChar
-val a8 = for (i <- 0 to 1; c <- "Hello") yield (c + i).toChar
-val a9 = for (c <- "Hello") yield c
-val a10 = for (c <- "Hello") yield c.toChar
-
-val a5 = a6
+}
