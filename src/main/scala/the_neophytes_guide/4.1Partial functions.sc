@@ -21,6 +21,7 @@ val pf1 = new PartialFunction[(String, Int), String] {
 //wordFrequencies.map(pf1)  //scala.MatchError:
 
 wordFrequencies.collect(pf)
+wordFrequencies.collect(pf1)
 
 
 //3 difference between normal and Partial functions
@@ -29,6 +30,6 @@ def wordsWithoutOutliersOld(wordFrequencies: Seq[(String, Int)]): Seq[String] =
   wordFrequencies.filter { case (_, f) => f > 3 && f < 25 } map { case (w, _) => w }
 
 
-//upgrade this the Partial Funcitons : performance(Just iterator once, up one twice:Filter + Map) and clear. 
+//upgrade this the Partial Functions : performance(Just iterator once, up one twice:Filter + Map) and clear. 
 def wordsWithoutOutliersNew(wordFrequencies: Seq[(String, Int)]): Seq[String] =
   wordFrequencies.collect { case (word, freq) if freq > 3 && freq < 25 => word }
