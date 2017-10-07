@@ -6,8 +6,7 @@ version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
-seq(webSettings: _*)
-
+//seq(webSettings: _*)
 //resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= {
