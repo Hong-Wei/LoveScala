@@ -6,9 +6,8 @@ version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
-seq(webSettings: _*)
-
-//resolvers += Resolver.sonatypeRepo("releases")
+List(webSettings: _*)
+resolvers += Resolver.sonatypeRepo("releases")
 
 libraryDependencies ++= {
   val liftVersion = "2.6-RC1"
