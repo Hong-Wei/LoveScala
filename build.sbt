@@ -28,8 +28,13 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-http" % "10.0.10",
   // Only when running against Akka 2.5 explicitly depend on akka-streams in same version as akka-actor
   "com.typesafe.akka" %% "akka-stream" % "2.5.4" ,// or whatever the latest version is
-  "com.typesafe.akka" %% "akka-actor"  % "2.5.4" // or whatever the latest version is
+  "com.typesafe.akka" %% "akka-actor"  % "2.5.4" ,// or whatever the latest version is
 //    "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M4"
+
+  //https://github.com/typesafehub/scala-logging#prerequisites
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  //https://github.com/typesafehub/scala-logging#getting-scala-logging
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2"
   )
 }
 
