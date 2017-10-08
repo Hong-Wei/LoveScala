@@ -2,11 +2,13 @@ package the_neophytes_guide
 
 import akka.actor.SupervisorStrategy.{Directive, Resume}
 import akka.actor.{ActorLogging, ActorRef, ActorSelection, ActorSystem, Props}
+import akka.pattern.AskTimeoutException
 import akka.stream.Supervision
 import com.typesafe.scalalogging.Logger
 
-import scala.concurrent.{Await, Future}
 
+import scala.concurrent.Future
+import util.Random
 
 
 object BaristaP15 extends App {
@@ -199,12 +201,19 @@ object P15HierarchyExample extends App {
 object P15HierarchyExampleException extends App {
   val logger = Logger(P15HierarchyExample.getClass)
   import Customer._
-  import the_neophytes_guide.P15HierarchyExample.Barista.ClosingTime
+  import the_neophytes_guide.P15HierarchyExampleException.Barista.ClosingTime
   val system: ActorSystem = ActorSystem("Coffeehouse")
   val barista: ActorRef = system.actorOf(Props[Barista], "Barista")
   val customerJohnny: ActorRef = system.actorOf(Props(classOf[Customer], barista), "Johnny")
   logger.info("1{}",barista)
   logger.info("2{}",customerJohnny)
+
+  import scala.concurrent.duration._
+  import akka.actor.OneForOneStrategy
+  import akka.actor.SupervisorStrategy.Restart
+  OneForOneStrategy(2, 10.seconds) {
+    case _ => Restart
+  }
 
   val decider: Supervision.Decider = {
     case e: Throwable =>
@@ -217,14 +226,16 @@ object P15HierarchyExampleException extends App {
   
   //BK 15.4.0 start processing
   logger.info("4 customerJohnny start calling caffe !")
+//    barista ! ClosingTime
   customerJohnny ! CaffeineWithdrawalWarning
-  customerJohnny ! CaffeineWithdrawalWarning
-  customerJohnny ! CaffeineWithdrawalWarning
-  customerJohnny ! CaffeineWithdrawalWarning
-  customerJohnny ! CaffeineWithdrawalWarning
-  customerJohnny ! CaffeineWithdrawalWarning
-  //  barista ! ClosingTime
-  //  system.terminate()
+//  customerJohnny ! CaffeineWithdrawalWarning
+//  customerJohnny ! CaffeineWithdrawalWarning
+//  customerJohnny ! CaffeineWithdrawalWarning
+//  customerJohnny ! CaffeineWithdrawalWarning
+//    system.terminate()
+//  customerJohnny ! CaffeineWithdrawalWarning
+//  customerJohnny ! CaffeineWithdrawalWarning
+//  customerJohnny ! CaffeineWithdrawalWarning
 
   import akka.actor._
   // object design some useful message, some static classed, objects....
@@ -240,53 +251,63 @@ object P15HierarchyExampleException extends App {
     log.info(s"0 Register Acotr set up working : ${self}!")
     import Register._
     import Barista._
+    import akka.util.Timeout
+    import akka.pattern.ask
+    import akka.pattern.pipe
+    import concurrent.duration._
+    import context.dispatcher // sender is in the context
+
+    implicit val timeout = Timeout(4.seconds)
     var revenue = 0
-    val prices: Map[Article, Int] = Map[Article, Int](Espresso -> 150, Cappuccino -> 250)
-    override def receive: PartialFunction[Any, Unit] = {
-      //BK 15.4.3 get the Message, start to process
-      case Transaction(article) =>
-        log.info(s"7 Register Acotr start working : ${self}!")
-        val price = prices(article)
-        val createReceiptTemp = createReceipt(price)
-        log.info(s"7.2 Register Acotr send message{} working : ${self}!",createReceiptTemp)
-        Thread.sleep(100)
-        sender ! createReceiptTemp //This actor only work to send the message back, no need to wait for result !!!
-        revenue += price
-        log.info(s"Revenue incremented to $revenue cents")
-    }
+    val prices = Map[Article, Int](Espresso -> 150, Cappuccino -> 250)
+    val printer = context.actorOf(Props[ReceiptPrinter], "Printer")
     override def postRestart(reason: Throwable) {
       super.postRestart(reason)
-      log.info(s"01 Restarted because of ${reason.getMessage}")
+      log.info(s"Restarted, and revenue is $revenue cents")
     }
-
     import scala.concurrent.duration._
     import akka.actor.OneForOneStrategy
     import akka.actor.SupervisorStrategy.Restart
-    OneForOneStrategy(10, 2.minutes) {
+    OneForOneStrategy(2, 10.seconds) {
       case _ => Restart
     }
 
-    val decider: PartialFunction[Throwable, Directive] = {
-      case _: PaperJamException => Resume
-    }
-    override def supervisorStrategy: SupervisorStrategy =
-      OneForOneStrategy()(decider.orElse(SupervisorStrategy.defaultStrategy.decider))
-    
-    
-    //BK 15.4.4 add the Exception here:
-    def createReceipt(price: Int): Receipt = {
-      import util.Random
-      if (Random.nextBoolean()){
-       log.info(s"7.1 Register Acotr throw PaperJamException !!!: ${self}!")
-        throw new PaperJamException("OMG, not again!")
-      }
-      log.info(s"7.1 Register Acotr process the message: ${self}!")
-      Receipt(price)
+    def receive = {
+      case Transaction(article) =>
+        val price = prices(article)
+        val requester = sender
+        (printer ? ReceiptPrinter.PrintJob(price)).map((requester, _)).pipeTo(self)
+      case (requester: ActorRef, receipt: Receipt) =>
+        revenue += receipt.amount
+        log.info(s"revenue is $revenue cents")
+        requester ! receipt
     }
 
   }
 
-
+  object ReceiptPrinter {
+    case class PrintJob(amount: Int)
+    class PaperJamException(msg: String) extends Exception(msg)
+  }
+  class ReceiptPrinter extends Actor with ActorLogging {
+    import ReceiptPrinter._
+    import the_neophytes_guide.P15HierarchyExampleException.Barista.Receipt
+    var paperJam = false
+    override def postRestart(reason: Throwable) {
+      super.postRestart(reason)
+      log.info(s"Restarted, paper jam == $paperJam")
+    }
+    def receive = {
+      case PrintJob(amount) => sender ! createReceipt(amount)
+    }
+    def createReceipt(price: Int): Receipt = {
+//      if (Random.nextBoolean()) paperJam = true
+//      if (paperJam) 
+        throw new PaperJamException("OMG, not again!")
+//      Receipt(price)
+    }
+  }
+  
   object Barista {
     case object EspressoRequest
     case object ClosingTime
@@ -304,6 +325,7 @@ object P15HierarchyExampleException extends App {
     import Barista._
     import Register._
     import EspressoCup._
+    
     // The following is used for Future and sender back !!!
     import context.dispatcher // sender is in the context
     import akka.util.Timeout
@@ -312,14 +334,14 @@ object P15HierarchyExampleException extends App {
     import concurrent.duration._
     import the_neophytes_guide.P15HierarchyExampleException.Barista.ClosingTime
 
-    val decider: Supervision.Decider = {
-      case e: Throwable =>
-        logger.error("Exception occurred, stopping...", e)
-        Supervision.stop
-      case _ =>
-        logger.error("Unknown problem, stopping...")
-        Supervision.stop
-    }
+//    val decider: Supervision.Decider = {
+//      case e: Throwable =>
+//        logger.error("Exception occurred, stopping...", e)
+//        Supervision.stop
+//      case _ =>
+//        logger.error("Unknown problem, stopping...")
+//        Supervision.stop
+//    }
     
     implicit val timeout = Timeout(1.seconds)
     //The Regiser Actor is created in its parents: Barista actor !!
@@ -331,7 +353,10 @@ object P15HierarchyExampleException extends App {
         val receipt: Future[Any] = register ? Transaction(Espresso)//Normally, just send Actor a message, here. We need the result back.
         log.info("8 Barista Acotr get message back from Register, No need wair for step7!")
 
-        val processedReceiptFuture: Future[(EspressoCup, Any)] = receipt.map((EspressoCup(Filled), _))
+        val processedReceiptFuture = receipt.map((EspressoCup(Filled), _))
+          .recover {
+          case _: AskTimeoutException => "ComebackLater"
+        } 
         //This is Blocking way!!!!
 //        val result: (EspressoCup, Receipt) = Await.result(processedReceiptFuture, 10 seconds).asInstanceOf[(EspressoCup, Receipt)]
 //        sender ! result
@@ -341,6 +366,7 @@ object P15HierarchyExampleException extends App {
         processedReceiptFuture.pipeTo(sender)
 
       case ClosingTime =>
+        log.info("9.1 Barista Acotr is stop!!!")
         context.stop(self)
     }
   }
@@ -354,6 +380,18 @@ object P15HierarchyExampleException extends App {
     import Customer._
     import Barista._
     import EspressoCup._
+    import context.dispatcher
+    import concurrent.duration._
+
+    context.watch(coffeeSource)
+
+    import scala.concurrent.duration._
+    import akka.actor.OneForOneStrategy
+    import akka.actor.SupervisorStrategy.Restart
+    OneForOneStrategy(2, 10.seconds) {
+      case _ => Restart
+    }
+    
     def receive = {
       //BK 15.4.1 Here, send the EspressoRequest to `Barista` Actor
       case CaffeineWithdrawalWarning =>
@@ -361,10 +399,17 @@ object P15HierarchyExampleException extends App {
         coffeeSource ! EspressoRequest
       case (EspressoCup(Filled), Receipt(amount)) =>
         log.info(s"10 Customer Finally get the caffeine for ${self}!")
-      case e: Throwable =>
-        log.error("Exception occurred, stopping...", e)
+//      case e: Throwable =>
+//        log.error("Exception occurred, stopping...", e)
 //      case _ =>
 //        log.error("Exception occurred, stopping...")
+      case "ComebackLater" =>
+        log.info("grumble, grumble")
+        context.system.scheduler.scheduleOnce(300.millis) {
+        coffeeSource ! EspressoRequest
+      }
+      case Terminated(barista) =>
+      log.info("Oh well, let's find another coffeehouse...")
     }
   }
 
