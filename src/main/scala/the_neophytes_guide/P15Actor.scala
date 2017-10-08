@@ -1,6 +1,6 @@
 package the_neophytes_guide
 
-import akka.actor.{ActorRef, ActorSelection, ActorSystem, Props}
+import akka.actor.{ActorLogging, ActorRef, ActorSelection, ActorSystem, Props}
 import com.typesafe.scalalogging.Logger
 
 import scala.concurrent.Future
@@ -32,7 +32,13 @@ object BaristaP15 extends App {
   import akka.actor.Actor
 
  
-  class Barista extends Actor {
+  class Barista extends Actor with ActorLogging {
+    log.info("This is actor-logging info ! ")
+    log.debug("This is actor-logging debug! ")
+    
+    val logger = Logger(BaristaP15.getClass)
+    logger.info("This is scala-logging  !")
+    logger.debug("This is scala-logging  debug!")
     val barista3 = context.actorSelection("../Barista") // akka://Coffeehouse/user/Barista
     // Actor.Receiver is the alias of `PartialFunction[Any, Unit]`
     // It is just a partition function, only focus on the useful methods, not all the cases.

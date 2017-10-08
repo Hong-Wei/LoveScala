@@ -30,6 +30,7 @@ libraryDependencies ++= {
   "com.typesafe.akka" %% "akka-actor"  % "2.5.4" ,// or whatever the latest version is
 //    "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M4"
 
+   "com.typesafe.akka" %% "akka-slf4j" % "2.5.4",
   //https://github.com/typesafehub/scala-logging#prerequisites
   "ch.qos.logback" % "logback-classic" % "1.2.3",
   //https://github.com/typesafehub/scala-logging#getting-scala-logging
