@@ -1,128 +1,76 @@
 package the_neophytes_guide
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.pattern.AskTimeoutException
+import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
+import the_neophytes_guide.P15HierarchyExampleErrorKernel.Barista.Receipt
+import the_neophytes_guide.P15HierarchyExampleErrorKernel.ReceiptPrinter.{PaperJamException, PrintJob}
+import the_neophytes_guide.P15HierarchyExampleErrorKernel.Register.{Article, Cappuccino, Espresso, Transaction}
 
 import scala.concurrent.Future
+import scala.util.Random
 
 
-//BK 15.4 An example-Exception 
 object P15HierarchyExampleErrorKernel extends App {
-  val logger = Logger(P15HierarchyExample.getClass)
+  
+  val log = Logger(P15HierarchyExampleSuperviser.getClass)
+
   import Customer._
   val system: ActorSystem = ActorSystem("Coffeehouse")
   val barista: ActorRef = system.actorOf(Props[Barista], "Barista")
   val customerJohnny: ActorRef = system.actorOf(Props(classOf[Customer], barista), "Johnny")
-  logger.info("1{}",barista)
-  logger.info("2{}",customerJohnny)
+  log.info("user1{}",barista)
+  log.info("user2{}",customerJohnny)
 
-//  import scala.concurrent.duration._
-//  import akka.actor.OneForOneStrategy
-//  import akka.actor.SupervisorStrategy.Restart
-//  OneForOneStrategy(2, 10.seconds) {
-//    case _ => Restart
-//  }
-//
-//  val decider: Supervision.Decider = {
-//    case e: Throwable =>
-//      logger.error("Exception occurred, stopping...", e)
-//      Supervision.Restart
-//    case _ =>
-//      logger.error("Unknown problem, stopping...")
-//      Supervision.Restart
-//  }
-  
-  //BK 15.4.0 start processing
-  logger.info("4 customerJohnny start calling caffe !")
-//    barista ! ClosingTime
-  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
-//    system.terminate()
-//  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
-//  customerJohnny ! CaffeineWithdrawalWarning
+  log.info("user4 customerJohnny start calling caffe !")
+  for(i <- 1 to 10){
+    customerJohnny ! CaffeineWithdrawalWarning
 
+  }
+
+  // close the system!!!
+//  Thread.sleep(2000)
+//  barista ! ClosingTime
+//  log.info("12 Totally close system !!!")
+//  system.terminate()
+
+
+  //Before do not define the actors, only call some code, here start import akka.actor
   import akka.actor._
-  // object design some useful message, some static classed, objects....
-  object Register {
-    sealed trait Article
-    case object Espresso extends Article
-    case object Cappuccino extends Article
-    case class Transaction(article: Article)
-    class PaperJamException(msg: String) extends Exception(msg)
+  object Customer {
+    case object CaffeineWithdrawalWarning
   }
-  // Design the `Register` Actor, just overide the `receive` method. Design the `Partial Function`, just process some cases, not all the cases 
-  //Coffeehouse/user/Barista/register
-  class Register extends Actor with ActorLogging{
-    log.info(s"0 Register Acator set up working : ${self}!")
+  //Coffeehouse/user/Customer
+  class Customer(coffeeSource: ActorRef) extends Actor with ActorLogging {
     import Barista._
-    import Register._
-    import akka.pattern.{ask, pipe}
-    import akka.util.Timeout
-    import context.dispatcher
-
-    import concurrent.duration._ // sender is in the context
-
-    implicit val timeout = Timeout(4.seconds)
-    var revenue = 0
-    val prices = Map[Article, Int](Espresso -> 150, Cappuccino -> 250)
-    val printer = context.actorOf(Props[ReceiptPrinter], "Printer")
-    override def postRestart(reason: Throwable) {
-      super.postRestart(reason)
-      log.info(s"Restarted, and revenue is $revenue cents")
-    }
-//    import scala.concurrent.duration._
-//    import akka.actor.OneForOneStrategy
-//    import akka.actor.SupervisorStrategy.Restart
-//    OneForOneStrategy(2, 10.seconds) {
-//      case _ => Restart
-//    }
-
+    import Customer._
+    import EspressoCup._
     def receive = {
-      case Transaction(article) =>
-        val price = prices(article)
-        val requester = sender
-        (printer ? ReceiptPrinter.PrintJob(price)).map((requester, _)).pipeTo(self)
-      case (requester: ActorRef, receipt: Receipt) =>
-        revenue += receipt.amount
-        log.info(s"revenue is $revenue cents")
-        requester ! receipt
+      case CaffeineWithdrawalWarning =>
+        log.info("user/Customer5 Customer Acator start working : ")
+        coffeeSource ! EspressoRequest
+
+      case (EspressoCup(Filled), Receipt(amount)) =>
+        log.info(s"user/Customer10 Customer Finally get the caffeine for ${self}!")
+
+      case e:PaperJamException=>
+        log.info(s"user/Customer10.1 This is a PaperJamException!!${e}!")
+
+      case e:Throwable=>
+        log.info(s"user/Customer10.2 This is a Throwable!!${e}!")
+
+      //Failure(akka.pattern.AskTimeoutException: Ask timed out on [Actor[akka://Coffeehouse/user/Barista/Register#1159606512]] after [1000 ms]. Sender[Actor[akka://Coffeehouse/user/Barista#1084907993]] sent message of type "the_neophytes_guide.P15MyHierarchyExample$BaristaRegister$Transaction".)!
+      case e =>
+        log.info(s"user/Customer10.3 This is!!${e}!")
     }
 
-  }
-
-  object ReceiptPrinter {
-    case class PrintJob(amount: Int)
-    class PaperJamException(msg: String) extends Exception(msg)
-  }
-  //Coffeehouse/user/Barista/register/ReceiptPrinter
-  class ReceiptPrinter extends Actor with ActorLogging {
-    import ReceiptPrinter._
-    import the_neophytes_guide.P15HierarchyExampleErrorKernel.Barista.Receipt
-    var paperJam = false
-    override def postRestart(reason: Throwable) {
-      super.postRestart(reason)
-      log.info(s"Restarted, paper jam == $paperJam")
-    }
-    def receive = {
-      case PrintJob(amount) => sender ! createReceipt(amount)
-    }
-    def createReceipt(price: Int): Receipt = {
-//      if (Random.nextBoolean()) paperJam = true
-//      if (paperJam) 
-        throw new PaperJamException("OMG, not again!")
-//      Receipt(price)
-    }
   }
   
   object Barista {
     case object EspressoRequest
     case object ClosingTime
     case class EspressoCup(state: EspressoCup.State)
+    
     object EspressoCup {
       sealed trait State
       case object Clean extends State
@@ -133,98 +81,90 @@ object P15HierarchyExampleErrorKernel extends App {
   }
   //Coffeehouse/user/Barista
   class Barista extends Actor with ActorLogging{
-    log.info(s"0 Barista Acator set up working : ${self}!")
     import Barista._
     import EspressoCup._
-    import Register._
-    
     // The following is used for Future and sender back !!!
     import akka.pattern.{ask, pipe}
     import akka.util.Timeout
     import context.dispatcher
-    import the_neophytes_guide.P15HierarchyExampleErrorKernel.Barista.ClosingTime
 
     import concurrent.duration._
-
-//    val decider: Supervision.Decider = {
-//      case e: Throwable =>
-//        logger.error("Exception occurred, stopping...", e)
-//        Supervision.stop
-//      case _ =>
-//        logger.error("Unknown problem, stopping...")
-//        Supervision.stop
-//    }
-    
     implicit val timeout = Timeout(1.seconds)
-    //The Regiser Actor is created in its parents: Barista actor !!
-    val register = context.actorOf(Props[Register], "Register")
+
+    //register Actor is from context, not from system. It is from context.
+    val register: ActorRef = context.actorOf(Props[Register], "Register")
+
     def receive = {
-      //BK 15.4.2 Send the `Transaction(Espresso)` to `Register` Actor 
       case EspressoRequest =>
-        log.info(s"6 Barista Acator start working : ${self}!")
+        log.info(s"user/Barista6 Barista Acator start working : ${self}!")
         val receipt: Future[Any] = register ? Transaction(Espresso)//Normally, just send Actor a message, here. We need the result back.
-        log.info("8 Barista Acator get message back from Register, No need wair for step7!")
+        log.info("user/Barista8 Barista Acator get message back from Register, need wait for step7")
 
-        val processedReceiptFuture = receipt.map((EspressoCup(Filled), _))
-          .recover {
-          case _: AskTimeoutException => "ComebackLater"
-        } 
-        //This is Blocking way!!!!
-//        val result: (EspressoCup, Receipt) = Await.result(processedReceiptFuture, 10 seconds).asInstanceOf[(EspressoCup, Receipt)]
-//        sender ! result
+        val processedReceiptFuture: Future[(EspressoCup, Any)] = receipt.map((EspressoCup(Filled), _))
+        log.info("user/Barista9 Barista Acator process message send Back to  from Customer{}",processedReceiptFuture)
 
-        log.info("9 Barista Acator process message send Back to  from Customer {}",processedReceiptFuture)
-        //This is Non-Blocking way!!!
         processedReceiptFuture.pipeTo(sender)
 
       case ClosingTime =>
-        log.info("9.1 Barista Acator is stop!!!")
+        log.info("user/Barista11 context.stop(self)")
         context.stop(self)
     }
   }
-
-  object Customer {
-    case object CaffeineWithdrawalWarning
+  // object design some useful message, some static classed, objects....
+  object Register {
+    sealed trait Article
+    case object Espresso extends Article
+    case object Cappuccino extends Article
+    case class Transaction(article: Article)
   }
-  // Here input the `Barista` actor
-  ////Coffeehouse/user/Customer
-  class Customer(coffeeSource: ActorRef) extends Actor with ActorLogging {
-    log.info(s"0 Customer Acator set up working : ${self}!")
-    import Barista._
-    import Customer._
-    import EspressoCup._
+  //Coffeehouse/user/Barista/BaristaRegister
+  class Register extends Actor with ActorLogging {
+    import akka.pattern.ask
+    import akka.pattern.pipe
     import context.dispatcher
-
-    context.watch(coffeeSource)
-
-    import akka.actor.OneForOneStrategy
-    import akka.actor.SupervisorStrategy.Restart
-
-    import scala.concurrent.duration._
-    OneForOneStrategy(2, 10.seconds) {
-      case _ => Restart
+    import concurrent.duration._
+    implicit val timeout = Timeout(4.seconds)
+    var revenue = 0
+    val prices = Map[Article, Int](Espresso -> 150, Cappuccino -> 250)
+    val printer = context.actorOf(Props[ReceiptPrinter], "Printer")
+    override def postRestart(reason: Throwable) {
+      super.postRestart(reason)
+      log.info(s"Restarted, and revenue is $revenue cents")
     }
-    
     def receive = {
-      //BK 15.4.1 Here, send the EspressoRequest to `Barista` Actor
-      case CaffeineWithdrawalWarning =>
-        log.info("5 Customer Acator start working : ")
-        coffeeSource ! EspressoRequest
-      case (EspressoCup(Filled), Receipt(amount)) =>
-        log.info(s"10 Customer Finally get the caffeine for ${self}!")
-//      case e: Throwable =>
-//        log.error("Exception occurred, stopping...", e)
-//      case _ =>
-//        log.error("Exception occurred, stopping...")
-      case "ComebackLater" =>
-        log.info("grumble, grumble")
-        context.system.scheduler.scheduleOnce(300.millis) {
-        coffeeSource ! EspressoRequest
-      }
-      case Terminated(barista) =>
-      log.info("Oh well, let's find another coffeehouse...")
+      case Transaction(article) =>
+        val price = prices(article)
+        val requester = sender
+        (printer ? PrintJob(price)).map((requester, _)).pipeTo(self)
+      case (requester: ActorRef, receipt: Receipt) =>
+        revenue += receipt.amount
+        log.info(s"revenue is $revenue cents")
+        requester ! receipt
     }
   }
+
+  object ReceiptPrinter {
+    case class PrintJob(amount: Int)
+    class PaperJamException(msg: String) extends Exception(msg)
+  }
+  class ReceiptPrinter extends Actor with ActorLogging {
+    var paperJam = false
+    override def postRestart(reason: Throwable) {
+      super.postRestart(reason)
+      log.info(s"Restarted, paper jam == $paperJam")
+    }
+    def receive = {
+      case PrintJob(amount) => sender ! createReceipt(amount)
+    }
+    def createReceipt(price: Int): Receipt = {
+      if (Random.nextBoolean()) paperJam = true
+      if (paperJam) throw new PaperJamException("OMG, not again!")
+      Receipt(price)
+    }
+  }
+
+
+  
 
 }
 
