@@ -26,9 +26,16 @@ object Barista extends App {
 
   //14.2.2 Extends the Actor trait and Implements the receive method.
   // The actor can do whatever you want it to, just can not return a value.
-  // 1 It is always side-effecting.
-  // 2 Untyped
-  // 3 Asynchronous and non-blocking
+  // type Receive = PartialFunction[Any, Unit]
+  // 1 It is always side-effecting, because of Receive return `Unit`
+  // 2 Untyped --> the input is Any
+  // 3 Asynchronous and non-blocking -->
+  //   Sender --> Queue --> Process 
+  //   Sender no need to wait message in the Queue.
+  //   Reveive process will block the current thread.
+  //   So in Reveive method, 
+  //     --> spend as little time inside them as possible
+  //     --> avoid calling blocking code
   class Barista extends Actor {
     // Actor.Receiver is the alias of `PartialFunction[Any, Unit]`
     // It is just a partition function, only focus on the useful methods, not all the cases.
