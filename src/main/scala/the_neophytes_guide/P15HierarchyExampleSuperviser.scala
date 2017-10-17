@@ -1,18 +1,14 @@
 package the_neophytes_guide
 
-import akka.actor.SupervisorStrategy.{Directive, Resume, Stop}
-import akka.actor.{ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, SupervisorStrategy}
-import akka.pattern.AskTimeoutException
-import akka.stream.Supervision
+import akka.actor.SupervisorStrategy.{Decider, Stop}
+import akka.actor.{ActorRef, ActorSystem, Props}
 import com.typesafe.scalalogging.Logger
 
 import scala.concurrent.Future
-import scala.util.{Failure, Random, Success}
 
 
-//BK 15.5 An example-Exception 
-object P15MyHierarchyExample extends App {
-  val logger = Logger(P15MyHierarchyExample.getClass)
+object P15HierarchyExampleSuperviser extends App {
+  val logger = Logger(P15HierarchyExampleSuperviser.getClass)
   class PaperJamException(msg: String) extends Exception(msg)
   import Customer._
   val system: ActorSystem = ActorSystem("Coffeehouse")
@@ -22,17 +18,18 @@ object P15MyHierarchyExample extends App {
   logger.info("user1{}",barista)
   logger.info("user2{}",customerJohnny)
   logger.info("user3{}",customerAlina)
-  //BK 15.3.0 start processing
 
   logger.info("user4 customerJohnny start calling caffe !")
-  val doSth1: Unit = customerJohnny ! CaffeineWithdrawalWarning
-   customerJohnny ! CaffeineWithdrawalWarning
+  for(i <- 1 to 100){
+    customerJohnny ! CaffeineWithdrawalWarning
+    
+  }
 
   // close the system!!!
-//  Thread.sleep(100)
-//  barista ! the_neophytes_guide.P15MyHierarchyExample.Barista.ClosingTime
-//  logger.info("12 Totally close system !!!")
-//  system.terminate()
+  Thread.sleep(2000)
+  barista ! the_neophytes_guide.P15HierarchyExampleSuperviser.Barista.ClosingTime
+  logger.info("12 Totally close system !!!")
+  system.terminate()
   
   
   //Before do not define the actors, only call some code, here start import akka.actor
@@ -52,33 +49,66 @@ object P15MyHierarchyExample extends App {
   //Coffeehouse/user/Barista
   class Barista extends Actor with ActorLogging{
     import Barista._
-    import EspressoCup._
     import BaristaRegister._
+    import EspressoCup._
     // The following is used for Future and sender back !!!
     import akka.pattern.{ask, pipe}
     import akka.util.Timeout
     import context.dispatcher
+
     import concurrent.duration._
     implicit val timeout = Timeout(1.seconds)
     
     //register Actor is from context, not from system. It is from context.
     val register: ActorRef = context.actorOf(Props[BaristaRegister], "Register")
 
-    //TODO 3 change `Resume` in father actor
-    val decider: PartialFunction[Throwable, Directive] = {
-      case _: PaperJamException => 
+  
+
+    //TODO 3.2 my own oneForStragegy
+    import akka.actor.OneForOneStrategy
+    import akka.actor.SupervisorStrategy.Restart
+
+    import scala.concurrent.duration._
+
+    private val oneForOneStrategy: OneForOneStrategy = OneForOneStrategy(10, 1.seconds, true) {
+      case _ => Restart
+    }
+    //TODO 4.1 This handle children's exceptions.
+    // Each actor defines its own supervisor strategy,
+    // which tells Akka how to deal with certain types of 
+    // errors occurring in your children.
+//    override def supervisorStrategy: SupervisorStrategy ={
+//      log.info("supervisorStrategy-my own supervisor strategy!")
+//      oneForOneStrategy
+//    }
+
+    //TODO 2 Directive
+    // type Decider = PartialFunction[Throwable, Directive]
+    // this allows you to match against
+    // certain subtypes of Throwable and decide for each of them
+    // what’s supposed to happen to your problematic child actor
+    // Directive --> Stop, Restart, Resume, allow you work on your child actor!
+    val decider: Decider = {
+      case _: PaperJamException =>
         log.info("decider-stop")
         Stop
     }
-    override def supervisorStrategy: SupervisorStrategy ={
+    
+    //TODO 3.1  override def supervisorStrategy
+    //The child actor exception is handled in supervisorStrategy.
+    //Not in the receiver method:
+    //This method will affect Actor behaviour.
+    //It retrun the SupervisorStrategy. there are three kinds:
+    //AllForOneStrategy
+    //OneForOneStrategy--> Here we overwrite the OneForOneStrategy()
+     override def supervisorStrategy: SupervisorStrategy ={
       log.info("supervisorStrategy-my own supervisor strategy!")
       OneForOneStrategy()(decider.orElse(SupervisorStrategy.defaultStrategy.decider))
     }
     
-
+    //TODO 4.2 This handle normal messages 
     def receive = {
-      //BK 15.3.2 Send the `Transaction(Espresso)` to `Register` Actor 
-      case the_neophytes_guide.P15MyHierarchyExample.Barista.EspressoRequest =>
+      case the_neophytes_guide.P15HierarchyExampleSuperviser.Barista.EspressoRequest =>
         log.info(s"user/Barista6 Barista Acator start working : ${self}!")
         val receipt: Future[Any] = register ? Transaction(Espresso)//Normally, just send Actor a message, here. We need the result back.
         log.info("user/Barista8 Barista Acator get message back from Register, need wait for step7")
@@ -88,7 +118,7 @@ object P15MyHierarchyExample extends App {
         
         processedReceiptFuture.pipeTo(sender)
 
-      case the_neophytes_guide.P15MyHierarchyExample.Barista.ClosingTime =>
+      case the_neophytes_guide.P15HierarchyExampleSuperviser.Barista.ClosingTime =>
         log.info("user/Barista11 context.stop(self)")
         context.stop(self)
     }
@@ -108,24 +138,14 @@ object P15MyHierarchyExample extends App {
     import BaristaRegister._
     var revenue = 0
     val prices: Map[Article, Int] = Map[Article, Int](Espresso -> 150, Cappuccino -> 250)
-    //TODO 1 if this actor throw exception, this will be called by his parents
+    //TODO 1 postResart hook !!!
     override def postRestart(reason: Throwable) {
       super.postRestart(reason)
       log.info(s"Restarted because of ${reason.getMessage}"
       )
     }
-
-    //TODO 2 supervisor strategy
-    import scala.concurrent.duration._ 
-    import akka.actor.OneForOneStrategy 
-    import akka.actor.SupervisorStrategy.Restart 
-    OneForOneStrategy(3, 1.seconds) { 
-      case _ => Restart 
-    }
-    
     
     override def receive: PartialFunction[Any, Unit] = {
-      //BK 15.3.3 get the Message, start to process
       case Transaction(article) =>
         log.info(s"user/Barista/BaristaRegister7 Register Acator start working : ${self}!")
         val price = prices(article)
@@ -140,6 +160,7 @@ object P15MyHierarchyExample extends App {
     def createReceipt(price: Int): Receipt = {
 //      if (Random.nextBoolean()) 
 //      Thread.sleep(100)
+//        new java.net.URL("")
         throw new PaperJamException("PaperJamException again!")
       Receipt(price)
     }
@@ -155,7 +176,6 @@ object P15MyHierarchyExample extends App {
     import Customer._
     import EspressoCup._
     def receive = {
-      //BK 15.3.1 Here, send the EspressoRequest to `Barista` Actor
       case CaffeineWithdrawalWarning =>
         log.info("user/Customer5 Customer Acator start working : ")
         coffeeSource ! EspressoRequest
