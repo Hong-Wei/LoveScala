@@ -1,17 +1,18 @@
 package the_neophytes_guide
 
 import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.pattern.AskTimeoutException
 import akka.util.Timeout
 import com.typesafe.scalalogging.Logger
-import the_neophytes_guide.P15HierarchyExampleErrorKernel.Barista.Receipt
-import the_neophytes_guide.P15HierarchyExampleErrorKernel.ReceiptPrinter.{PaperJamException, PrintJob}
-import the_neophytes_guide.P15HierarchyExampleErrorKernel.Register.{Article, Cappuccino, Espresso, Transaction}
+import the_neophytes_guide.P15HierarchyExampleErrorKernelTimeOut.Barista.Receipt
+import the_neophytes_guide.P15HierarchyExampleErrorKernelTimeOut.ReceiptPrinter.{PaperJamException, PrintJob}
+import the_neophytes_guide.P15HierarchyExampleErrorKernelTimeOut.Register.{Article, Cappuccino, Espresso, Transaction}
 
 import scala.concurrent.Future
 import scala.util.Random
 
 
-object P15HierarchyExampleErrorKernel extends App {
+object P15HierarchyExampleErrorKernelTimeOut extends App {
   
   val log = Logger(P15HierarchyExampleSuperviser.getClass)
 
@@ -39,6 +40,7 @@ object P15HierarchyExampleErrorKernel extends App {
   import akka.actor._
   object Customer {
     case object CaffeineWithdrawalWarning
+    case object ComebackLater
   }
   //Coffeehouse/user/Customer
   class Customer(coffeeSource: ActorRef) extends Actor with ActorLogging {
@@ -53,8 +55,8 @@ object P15HierarchyExampleErrorKernel extends App {
       case (EspressoCup(Filled), Receipt(amount)) =>
         log.info(s"user/Customer10 Customer Finally get the caffeine for ${self}!")
 
-      case e:PaperJamException=>
-        log.info(s"user/Customer10.1 This is a PaperJamException!!${e}!")
+      case ComebackLater=>
+        log.info(s"user/Customer10.1 ComebackLater soon!!!")
 
       case e:Throwable=>
         log.info(s"user/Customer10.2 This is a Throwable!!${e}!")
@@ -100,8 +102,13 @@ object P15HierarchyExampleErrorKernel extends App {
         val receipt: Future[Any] = register ? Transaction(Espresso)//Normally, just send Actor a message, here. We need the result back.
         log.info("user/Barista8 Barista Acator get message back from Register, need wait for step7")
 
-        val processedReceiptFuture: Future[(EspressoCup, Any)] = receipt.map((EspressoCup(Filled), _))
-        log.info("user/Barista9 Barista Acator process message send Back to  from Customer{}",processedReceiptFuture)
+        val processedReceiptFuture = receipt
+          .map((EspressoCup(Filled), _))
+          .recover {  //BK 1 Timeout, just add the recover for the future. It will not return the AskTimeoutException!!
+            case _: AskTimeoutException => ComebackLater
+          }
+        
+        log.info("user/Barista9 Barista Acator process message send Back to  from Customer")
 
         processedReceiptFuture.pipeTo(sender)
 
@@ -119,9 +126,9 @@ object P15HierarchyExampleErrorKernel extends App {
   }
   //Coffeehouse/user/Barista/BaristaRegister
   class Register extends Actor with ActorLogging {
-    import akka.pattern.ask
-    import akka.pattern.pipe
+    import akka.pattern.{ask, pipe}
     import context.dispatcher
+
     import concurrent.duration._
     implicit val timeout = Timeout(4.seconds)
     var revenue = 0
@@ -135,7 +142,6 @@ object P15HierarchyExampleErrorKernel extends App {
       case Transaction(article) =>
         val price = prices(article)
         val requester = sender
-        //BK 2 special, pipeTo itself and run revenue stuff.
         (printer ? PrintJob(price)).map((requester, _)).pipeTo(self)
       case (requester: ActorRef, receipt: Receipt) =>
         revenue += receipt.amount
@@ -144,7 +150,6 @@ object P15HierarchyExampleErrorKernel extends App {
     }
   }
 
-  //BK 1 Added new child actor, for exception may happen!!
   object ReceiptPrinter {
     case class PrintJob(amount: Int)
     class PaperJamException(msg: String) extends Exception(msg)

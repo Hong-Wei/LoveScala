@@ -1,34 +1,37 @@
 package the_neophytes_guide
 
-import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.pattern.AskTimeoutException
-import com.typesafe.scalalogging.Logger
+import the_neophytes_guide.P15MyOwnExample.Barista.ClosingTime
 
-import scala.concurrent.Future
-import scala.util.Random
-
-
-//BK 15.4 An example-Exception 
-object P15HierarchyExampleErrorKernel_back extends App {
-  val logger = Logger(P15HierarchyExample.getClass)
+//BK 1 my own example
+object P15MyOwnExample extends App {
   import Customer._
+  import akka.actor.{ActorRef, ActorSystem, Props}
+  import akka.pattern.AskTimeoutException
+  import com.typesafe.scalalogging.Logger
+  import scala.concurrent.Future
+  import scala.util.Random
+  
+  val log = Logger(P15MyOwnExample.getClass)
+  
   val system: ActorSystem = ActorSystem("Coffeehouse")
   val barista: ActorRef = system.actorOf(Props[Barista], "Barista")
   val customerJohnny: ActorRef = system.actorOf(Props(classOf[Customer], barista), "Johnny")
-  logger.info("1{}",barista)
-  logger.info("2{}",customerJohnny)
+  log.info("1{}",barista)
+  log.info("2{}",customerJohnny)
 
-  //BK 15.4.0 start processing
-  logger.info("4 customerJohnny start calling caffe !")
+  //BK 2 start AKka processes.
+  log.info("3 customerJohnny start calling caffe !")
   for(i<- 1 to 10) customerJohnny ! CaffeineWithdrawalWarning
 
-//    barista ! ClosingTime
-//    system.terminate()
+  Thread.sleep(2000)
+  barista ! ClosingTime
+//  system.terminate()
   
   import akka.actor._
 
   object Customer {
     case object CaffeineWithdrawalWarning
+    case object ComebackLater
   }
   // Here input the `Barista` actor
   ////Coffeehouse/user/Customer
@@ -38,16 +41,9 @@ object P15HierarchyExampleErrorKernel_back extends App {
     import Customer._
     import EspressoCup._
     import context.dispatcher
+    import scala.concurrent.duration._
 
     context.watch(coffeeSource)
-
-    import akka.actor.OneForOneStrategy
-    import akka.actor.SupervisorStrategy.Restart
-
-    import scala.concurrent.duration._
-    OneForOneStrategy(2, 1.seconds) {
-      case _ => Restart
-    }
 
     def receive = {
       //BK 15.4.1 Here, send the EspressoRequest to `Barista` Actor
@@ -56,7 +52,7 @@ object P15HierarchyExampleErrorKernel_back extends App {
         coffeeSource ! EspressoRequest
       case (EspressoCup(Filled), Receipt(amount)) =>
         log.info(s"10 Customer Finally get the caffeine for ${self}!")
-      case "ComebackLater" =>
+      case ComebackLater =>
         log.info("grumble, grumble")
         context.system.scheduler.scheduleOnce(300.millis) {
           coffeeSource ! EspressoRequest
@@ -86,7 +82,6 @@ object P15HierarchyExampleErrorKernel_back extends App {
     import EspressoCup._
 
     // The following is used for Future and sender back !!!
-    import P15HierarchyExampleErrorKernel_back.Barista.ClosingTime
     import akka.pattern.{ask, pipe}
     import akka.util.Timeout
     import context.dispatcher
@@ -97,7 +92,6 @@ object P15HierarchyExampleErrorKernel_back extends App {
     //The Regiser Actor is created in its parents: Barista actor !!
     val register = context.actorOf(Props[BaristaRegister], "Register")
     def receive = {
-      //BK 15.4.2 Send the `Transaction(Espresso)` to `Register` Actor 
       case EspressoRequest =>
         log.info(s"6 Barista Acator start working : ${self}!")
         val receipt: Future[Any] = register ? Transaction(Espresso)//Normally, just send Actor a message, here. We need the result back.
@@ -105,7 +99,7 @@ object P15HierarchyExampleErrorKernel_back extends App {
 
         val processedReceiptFuture = receipt.map((EspressoCup(Filled), _))
           .recover {
-            case _: AskTimeoutException => "ComebackLater"
+            case _: AskTimeoutException => ComebackLater
           }
         log.info("9 Barista Acator process message send Back to  from Customer {}",processedReceiptFuture)
         //This is Non-Blocking way!!!
@@ -123,7 +117,6 @@ object P15HierarchyExampleErrorKernel_back extends App {
     case object Espresso extends Article
     case object Cappuccino extends Article
     case class Transaction(article: Article)
-    class PaperJamException(msg: String) extends Exception(msg)
   }
   // Design the `Register` Actor, just overide the `receive` method. Design the `Partial Function`, just process some cases, not all the cases 
   //Coffeehouse/user/Barista/register
@@ -166,7 +159,7 @@ object P15HierarchyExampleErrorKernel_back extends App {
   //Coffeehouse/user/Barista/register/ReceiptPrinter
   class BaristaRegisterPrinter extends Actor with ActorLogging {
     import BaristaRegisterPrinter._
-    import P15HierarchyExampleErrorKernel_back.Barista.Receipt
+    import P15MyOwnExample.Barista.Receipt
     var paperJam = false
     override def postRestart(reason: Throwable) {
       super.postRestart(reason)
