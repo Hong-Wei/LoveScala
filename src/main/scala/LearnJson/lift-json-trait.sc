@@ -1,5 +1,7 @@
 import net.liftweb.json._
 
+import scala.text.Document
+
 //implicit val formats = net.liftweb.json.DefaultFormats
 
 trait InternalCaseClassTrait{
