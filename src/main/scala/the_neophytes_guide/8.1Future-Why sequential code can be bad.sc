@@ -1,3 +1,13 @@
+//http://danielwestheide.com/blog/2013/01/09/the-neophytes-guide-to-scala-part-8-welcome-to-the-future.html
+
+//Writing well-behaved concurrent programs a lot easier than rather low-level concurrency.
+//Two cornerstones: Future + Actor. 
+// 
+// Actors used for maintaining state and providing a messaging endpoint.
+// in all other circumstances, it is probably better to use Future. 
+// 
+
+
 import scala.util.Try
 // Some type aliases, just for getting more meaningful method signatures:
 type CoffeeBeans = String
