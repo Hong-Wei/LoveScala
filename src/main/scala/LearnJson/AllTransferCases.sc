@@ -1,7 +1,5 @@
 import net.liftweb.json._
 
-import scala.text.Document
-
 implicit val formats = net.liftweb.json.DefaultFormats
 
 case class InternalCaseClass(
@@ -40,7 +38,7 @@ val classToJValue: JValue = Extraction.decompose(twoCaseClass)
 
 //2 JValue -->String
 //2.1 JValue -->Document first.
-val jValueToDocument: Document2 = render(classToJValue)
+val jValueToDocument: scala.text.Document = render(classToJValue)
 //2.2 Document-->String
 val documnetToStringCompact: String = compact(jValueToDocument)
 val documnetToStringPretty: String = pretty(jValueToDocument)

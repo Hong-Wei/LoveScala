@@ -43,3 +43,15 @@ object Chapter8 extends  App{
   employee.salary=20
   print(employee)
 }
+
+
+trait people
+
+class Chapter8 (val age : Int){
+  val a: Int = age
+  val b: Int = age
+}
+
+
+//bk 8.1 Extending a Class
+case class Employee (override val age : Int) extends Chapter8 (age : Int) with people
