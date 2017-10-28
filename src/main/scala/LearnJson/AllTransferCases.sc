@@ -10,7 +10,8 @@ case class InternalCaseClass(
 case class OutBoundCaseClass(
                               cbsToken: String,
                               backendMessages: List[InternalCaseClass],
-                              owners: List[String]
+                              owners: List[String],
+                              Number: BigDecimal
                             )
 
 
