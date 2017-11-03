@@ -1,3 +1,9 @@
-Array(1, 2) == Array(1, 2) // yields false
-Array(1, 2) equals  Array(1, 2) // yields false
-Array(1, 2) eq  Array(1, 2) // yields false
+def numsFrom(n: BigInt): Stream[BigInt] = n #:: numsFrom(n + 1)
+
+val tenOrMore = numsFrom(10)
+
+tenOrMore.tail.tail.tail
+
+val squares = numsFrom(1).map(x => x * x)
+
+squares.take(5) take 5

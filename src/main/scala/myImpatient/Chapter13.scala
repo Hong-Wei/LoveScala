@@ -1,12 +1,11 @@
 package myImpatient
 
 import java.awt.Color
+import java.util
 
 import scala.List
-import scala.collection.immutable.List
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.immutable.{IndexedSeq, List, Seq}
 import scala.collection.{Map, SortedSet, mutable}
-import scala.collection.immutable.List
 
 /**
   * Created by zhanghongwei on 14/11/16.
@@ -29,7 +28,7 @@ object MainCollectionsTraits1 extends App {
 
 
   // uniform creation principle
-  // eg2: each Scala collection contain a companion object with aplly method, to create the instance!
+  // --> each collection trait or class has a compaion object with an apply method or constracting an instance of the collection. 
   private val ints: Iterable[Int] = Iterable(0xFF, 0xFF00, 0xFF0000)
   private val colors: Set[Color] = Set(Color.RED, Color.GREEN, Color.BLUE)
   private val colorToInt: Map[Color, Int] = Map(Color.RED -> 0xFF, Color.GREEN -> 0xFF00, Color.BLUE -> 0xFF0000)
@@ -55,6 +54,7 @@ object MutableAndImmutalbeCollections2 extends App {
   val immutableMap1 = Map("Hello" -> 42)
   val mutableMap2 = new mutable.HashMap[String, Int]
 
+  //TODO ??, funny, you should read about it.
   def digits(n: Int): Set[Int] =
     if (n < 0) {
       digits(-n)
@@ -70,21 +70,22 @@ object MutableAndImmutalbeCollections2 extends App {
 //bk 13.3 Sequences
 object Sequences3 extends App {
   //Vector Range
-  val vec = (1 to 1000000) map (_ % 100) // map transforms a Range into a Vector
+  val vec: IndexedSeq[Int] = (1 to 1000000) map (_ % 100) // map transforms a Range into a Vector
 
-  val lst = vec.toList // Vector -->List
+  val lst: Seq[Int] = vec.toList // Vector -->List
 
-  def time[T](block: => T) = {
+  
+  //TODO, need to know, this method mean? what is input? ByNameParameter ??https://tpolecat.github.io/2014/06/26/call-by-name.html
+  def time[T](block: =>T) = {
     val start = System.nanoTime
     val result = block
     val elapsed = System.nanoTime - start
     println(elapsed + " nanoseconds")
     result
   }
+  time(vec(1000000-1)) // read the IndexedSeq(50000) Position value --> an indexed sequence with fast random access
 
-  time(vec(500000))
-
-  time(lst(500000))
+  time(lst(1000000-1)) // read the Seq(50000) Position value -->
 
 }
 
@@ -98,20 +99,20 @@ object List4 extends App {
   9 :: 4 :: 2 :: Nil
   9 :: (4 :: (2 :: Nil))
 
-  //eg2: Iterable List
+  //eg2: Iterable List -->use recursion
   def sum(lst: List[Int]): Int =
-  if (lst == Nil) 0 else lst.head + sum(lst.tail)
+    if (lst == Nil) 0 else lst.head + sum(lst.tail)
 
   sum(scala.List(9, 4, 2))
 
-  //  def sum2(lst: List[Int]): Int = lst match {
-  //    case Nil => 0
-  //    case h :: t => h + sum(t) // h is lst.head, t is lst.tail // decountructor the List to Head and Tail.
-  //  }
+  def sum2(lst: List[Int]): Int = lst match {
+    case Nil => 0
+    case h :: t => h + sum(t) // h is lst.head, t is lst.tail // de-constructor the List to Head and Tail.
+  }
 
   sum(scala.List(9, 4, 2))
 
-  //eg3: before you recucive , scala has been sum method
+  //eg3: before you recursion , scala has been sum method
   scala.List(9, 4, 2).sum
 }
 
@@ -219,7 +220,7 @@ object OperatorsforAddingorRemovingElements7 extends App{
 
 //BK 13.8 Common Methods
 object CommonMethods8 extends App{
-  val coll = 1 to 10
+  val coll: Seq[Int] = 1 to 10
 
   coll.head
   coll.last
@@ -339,7 +340,7 @@ object ReducingFoldingAndScanning10 extends App{
 
 }
 
-//  //BK 13.11 Zipping
+//BK 13.11 Zipping
 object Zipping extends App{
   import scala.collection.immutable.List
   val prices = List(5.0, 20.0, 9.95)
@@ -363,9 +364,7 @@ object Zipping extends App{
 
 }
 
-//
-//
-//  //bk 13.12 Iterators
+ //bk 13.12 Iterators
 object Iterators extends App{
   val iter1 = (1 to 10).sliding(3)
 
@@ -389,64 +388,6 @@ object Iterators extends App{
 
   iter4.toIterable
 }
-//
-//  //bk 13.13 Streams
-object Streams extends App{
-  def numsFrom(n: BigInt): Stream[BigInt] = n #:: numsFrom(n + 1)
-
-  val tenOrMore = numsFrom(10)
-
-  tenOrMore.tail.tail.tail
-
-  val squares = numsFrom(1).map(x => x * x)
-
-  squares.take(5).force
-
-  import scala.io.Source
-
-  val words = Source.fromFile("/usr/share/dict/words").getLines.toStream
-  words
-  words(5)
-  words
-}
-//bk 13.14 Lazy Views
-object LazyView extends App{
-//  import scala.math._
-//
-//  val powers = (0 until 1000).view.map(pow(10, _))
-//
-//  powers(100)
-//
-//  val powers = (0 until 1000).view.map(n => { println(n) ; pow(10, n) })
-//
-//  powers(100) // Prints 100 in the method call
-//  powers(100) // Prints 100 again; the method is called twice
-//
-//  // Contrast with streams
-//
-//  def powers(n: Int): Stream[Double] = { println(n) ; pow(10, n) } #:: powers(n + 1)
-//
-//  val powerStream = powers(0) // Calls method with 0
-//  powerStream(100) // Calls method with 1 to 100
-//  powerStream(100) // Doesn't call the method again
-//
-//  (0 to 1000).map(pow(10, _)).map(1 / _)
-//
-//  (0 to 1000).view.map(pow(10, _)).map(1 / _).force
-//
-//  (0 to 1000).map(x => pow(10, -x))
-}
-//  val powers = (0 until 1000).view.map(scala.math.pow(10, _))
-//  powers(1000)
-//  (0 to 1000).map(scala.math.pow(10, _)).map(1 / _)
-
-
-object Chapter13 extends App {
-
-}
-
-
-
 
 
 
