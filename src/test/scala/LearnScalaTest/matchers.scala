@@ -235,6 +235,28 @@ class matchers extends FlatSpec with Matchers {
   }
 
   it should "Working with `aggregations`" in {
+    List(1, 2, 3) should contain atLeastOneOf (2, 3, 4)
+    Array(1, 2, 3) should contain atLeastOneOf (3, 4, 5)
+    "abc" should contain atLeastOneOf ('c', 'a', 't')
+    List(1, 2, 3, 4, 5) should contain atMostOneOf (5, 6, 7)
+    List(1, 2, 3, 4, 5) should contain allOf (2, 3, 5)
+    List(1, 2, 3, 2, 1) should contain only (1, 2, 3)
+    List(1, 2, 2, 3, 3, 3) should contain theSameElementsAs Vector(3, 2, 3, 1, 2, 3)
+  }
+  
+  it should "Checking arbitrary properties with have" in {
+
+    case class Book(
+                     title: String,
+                     author: List[String],
+                     pubYear: Int
+                   )
+    
+    val book = Book("Programming in Scala",Nil,0)
+    book should have (
+      'pubYear (0)
+    )
+
   }
 
 
