@@ -7,12 +7,6 @@ import scala.collection.mutable.ArrayBuffer
 /**
   * Created by zhanghongwei on 11/11/16.
   */
-class Chapter3 {
-  val nums = new Array[Int](10)
-  val stringArr = new Array[String](10)
-  val s = Array("Hello", "World")
-}
-
 object Chapter3 {
   val nums = new Array[Int](10)
   val stringArr = new Array[String](10)

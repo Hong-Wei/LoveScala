@@ -3,19 +3,15 @@ package myImpatient
 /**
   * Created by zhanghongwei on 12/11/16.
   */
-class Chapter4 {
-  val scores = Map("Alice" -> 10, "Bob" -> 3, "Cindy" -> 8)
-  val socreMutalbe = scala.collection.mutable.Map("Alice" -> 10, "Bob" -> 3, "Cindy" -> 8)
-  //  val socreMutalbe1= scala.collection.mutable.HashMap(String,Int);
-  val scores1: Int = scores("Bob")
-}
-
 object Chapter4 {
   val scores = Map("Alice" -> 10, "Bob" -> 3, "Cindy" -> 8)
   val socreMutalbe = scala.collection.mutable.Map("Alice" -> 1, "Bob" -> 2, "Cindy" -> 3)
   //  val socreMutalbe1= scala.collection.mutable.HashMap(String,Int);
   val scores1: Int = if (scores.contains("bob")) scores("Bob1") else 0
 
+//  scores.getOrElse("Alice1",throw new RuntimeException("NO this value"))
+
+  private val maybeInt3: Option[Int] = scores.get("")
   def main(args: Array[String]): Unit = {
     val a = Chapter4
     val orElse: Int = scores.getOrElse("Bob", 0)
@@ -69,7 +65,7 @@ object Chapter4 {
 
     val scores1 = scala.collection.immutable.SortedMap("A"->1,"B"->2,"C"->3,"D"->4)
     val scores3 = scala.collection.mutable.LinkedHashMap("A"->1,"B"->2,"C"->3,"D"->4)
-    val tuple: (Int, Double, String, Chapter4) = (1,3.14,"Fred",new Chapter4)
+    val tuple: (Int, Double, String, Chapter1) = (1,3.14,"Fred",new Chapter1)
 
 
     //4.8

@@ -1,9 +1,19 @@
-def numsFrom(n: BigInt): Stream[BigInt] = n #:: numsFrom(n + 1)
 
-val tenOrMore = numsFrom(10)
+// trait extends the class
+trait LoggedException131 extends Exception  {
+  def log() {
+    getMessage
+  }
+}
 
-tenOrMore.tail.tail.tail
+// trait use self type
+trait LoggedException132   {
+  this: Exception =>
+  def log() {
+    getMessage
+  }
+}
 
-val squares = numsFrom(1).map(x => x * x)
 
-squares.take(5) take 5
+class Some1 extends LoggedException131
+class Some2 extends Exception with LoggedException132

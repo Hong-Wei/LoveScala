@@ -3,15 +3,33 @@ package myImpatient
 /**
   * Created by zhanghongwei on 16/11/16.
   */
-//bk Chapter 11. Operators
-object Chapter11 {
-
+object Identifiers extends App{
+  //BK 11.1 Identifiers — page 131 •
+  //scala support more characters.
+  // all the three are not support
+  val `()[]{}` = 8
+  val `.,;'` =9 
+  val `'""`= 10
+  //1 so these support
+  val !#%&*+-/:<=>?@\^|~ = 7
+  //2 this support 
+  val √ = scala.math.sqrt _
+  //3 you can include just about any sequence of characters in backquotes ``
+  val `val` = 42
+  val `main` =50
+  val `I Like this game` = 100
+  // yield is reserved word, so you need backquotes to call java method. 
+  Thread.`yield`()
 }
 
-//bk 11.1 Identifiers — page 131 •
-//bk 11.2 Infix Operators — page 132 •
 
+//BK 11.2 Infix Operators — page 132 •
 object InfixOperators2 extends App {
+  // a identifier b where 
+  // identifier denotes a method with two parameters (one implicit, one explicit). 
+  // For example, the expression
+  1 to 10
+  //actuallt this 
 
   import scala.collection.immutable.Range.Inclusive
   import scala.math._
@@ -33,13 +51,13 @@ object InfixOperators2 extends App {
   val f2 = new Fraction(2, 5)
   println(f1 * f2)
 
-  //  private val tuple: (Int, Int) = 1 -> 10
-  //  private val inclusive: Inclusive = 1to10
-  //  private val to: Inclusive = 1.to(10)
+  private val tuple: (Int, Int) = 1 -> 10
+  private val inclusive: Inclusive = 1 to 10
+  private val to: Inclusive = 1.to(10)
 
 }
 
-//bk 11.3 Unary Operators — page 133 •
+//BK 11.3 Unary Operators — page 133 •
 object UnaryOperators3 extends App {
   //eg1 : postfix
   1 toString
@@ -53,7 +71,7 @@ object UnaryOperators3 extends App {
 
 }
 
-//bk 11.4 Assignment Operators — page 133 •
+//BK 11.4 Assignment Operators — page 133 •
 object AssignmentOperators4 extends App {
   var a: Any = 3
   a ->= 4 // Same as a = a -> 4
@@ -65,7 +83,7 @@ object AssignmentOperators4 extends App {
   b += 4 // Calls the += method; you couldn't use b = b + 4 with a val
 }
 
-//bk 11.5 Precedence — page 134 •
+//BK 11.5 Precedence — page 134 •
 object Precedence5 extends App {
   1 + 2 * 3 // * has higher precedence than +
   1 + (2 * 3)
@@ -82,7 +100,7 @@ object Precedence5 extends App {
   1 to 10 toString // Postfix operators have lower precedence than infix
 }
 
-//bk 11.6 Associativity 143
+//BK 11.6 Associativity 143
 object Associativity6 extends App {
   17 - 2 - 9 // - is left associative
   (17 - 2) - 9
@@ -104,7 +122,7 @@ object Associativity6 extends App {
 }
 
 
-//bk 11.7 The apply and update Methods
+//BK 11.7 The apply and update Methods
 // let you extend the use of f(arg1,arg2...) , even if f is not a funciton.
 // it will  call f.apply(arg1,arg2...) implicit method
 // or f(arg1,arg2...) = value, it wil lcall
@@ -129,7 +147,7 @@ object ApplyUpapply7 extends App {
 
 }
 
-//bk 11.8 Extractors
+//BK 11.8 Extractors
 //An extractor is an object with an unapply method
 object Extractors8 extends App {
 
@@ -205,7 +223,7 @@ object Extractors8 extends App {
 
 }
 
-//bk 11.9 Extractors with One or No Arguments •
+//BK 11.9 Extractors with One or No Arguments •
 object ExtractorsWithOneOrNoArguments9 extends App {
 
 
@@ -256,7 +274,7 @@ object ExtractorsWithOneOrNoArguments9 extends App {
 
 }
 
-//bk 11.10 The unapplySeq Method
+//BK 11.10 The unapplySeq Method
 object UnapplySeq extends App {
   val author = "Peter van der Linden"
 
