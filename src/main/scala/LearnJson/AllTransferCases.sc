@@ -30,7 +30,7 @@ case class InBoundCaseClass2(
                            )
 
 
-var oneCaseClass: OutBoundCaseClass = OutBoundCaseClass("cbsToken", List(InternalCaseClass("text")), List(""))
+var oneCaseClass: OutBoundCaseClass = OutBoundCaseClass("cbsToken", List(InternalCaseClass("text")), List(""),BigDecimal(1))
 val twoCaseClass: InternalCaseClass = InternalCaseClass("text")
 
 

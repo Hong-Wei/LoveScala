@@ -1,19 +1,19 @@
+val author = "Peter vander Linden"
+author match {
+  case Name(first, last) if (last.contains(" ")) =>  print(last) // Matches if the author is Peter van der Linden
+  case Name(first, last) => 1;print(last)
+}
 
-// trait extends the class
-trait LoggedException131 extends Exception  {
-  def log() {
-    getMessage
+author
+
+object Name {
+  def unapply(input: String): Option[(String, String)] = {
+    val pos = input.indexOf(" ")
+    if (pos == -1) None
+    else Some((input.substring(0, pos), input.substring(pos + 1)))
   }
 }
 
-// trait use self type
-trait LoggedException132   {
-  this: Exception =>
-  def log() {
-    getMessage
-  }
+object IsCompound {
+  def unapply(input: String): Boolean = input.contains(" ")
 }
-
-
-class Some1 extends LoggedException131
-class Some2 extends Exception with LoggedException132

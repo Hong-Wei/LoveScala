@@ -31,13 +31,9 @@ object Chapter14 extends App {
 
 //  } yield 1
 
-
-
-
-
   //2 match is an expression, not a statement.
   private val i: Int = ch match {
-    case '+' => 1
+    case '+' | '*'| 'x'|'b'=> 1
     case '-' => -1
     case _ => 0 // if no ,scala.MatchError
   }

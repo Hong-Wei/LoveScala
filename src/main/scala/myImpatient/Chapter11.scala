@@ -91,7 +91,7 @@ object UnaryOperators3 extends App {
 
 }
 
-//BK 11.4 Assignment Operators — page 133 •
+//BK 11.4 Assignment Operators
 object AssignmentOperators4 extends App {
   var a: Any = 3
   a ->= 4 // Same as a = a -> 4
@@ -103,7 +103,7 @@ object AssignmentOperators4 extends App {
   b += 4 // Calls the += method; you couldn't use b = b + 4 with a val
 }
 
-//BK 11.5 Precedence — page 134 •
+//BK 11.5 Precedence
 object Precedence5 extends App {
   1 + 2 * 3 // * has higher precedence than +
   1 + (2 * 3)
@@ -120,7 +120,7 @@ object Precedence5 extends App {
   1 to 10 toString // Postfix operators have lower precedence than infix
 }
 
-//BK 11.6 Associativity 143
+//BK 11.6 Associativity
 object Associativity6 extends App {
   17 - 2 - 9 // - is left associative
   (17 - 2) - 9
@@ -170,7 +170,7 @@ object ApplyUpapply7 extends App {
 //BK 11.8 Extractors
 //An extractor is an object with an unapply method
 object Extractors8 extends App {
-  //eg1: opposite from apply
+  //eg1: normally, you can create upapply and apply for the same Class,
   //apply
   private val fraction: Fraction = Fraction(3, 4)
   //unapply
@@ -179,9 +179,18 @@ object Extractors8 extends App {
   println(b)
 
   //eg2: extract from String
+  // You can define the unapply method just in any object,it can have some input parameters.
+  // You can call this upapply method, automatically by this parameters.
   val author = "Zhang Hongwei"
-  val Name(first, last) = author
-
+  val author2 = Fraction(2, 5)
+  val Name(first, last) = author // Here we difine two parameters. first, last and asing the vaule 
+  val Name(first2, last2) = author2
+  val Name(first3) = author2
+  //  Error: too many patterns for object Name offering (String, String): expected 2, found 3
+  // The following has the compile error, will not find the unapply method, when run this method.
+  // val Name(a1,a2,a3) = author2
+  // apply --> paramters --> object.   eg: val object = Fraction(1,2) --> return the object   
+  // upapply --> object --> parameters eg: val Fraction(a,b) = object --> return a and b variable
   //eg3: case class
   case class Currency(value: Double, unit: String)
 
@@ -193,13 +202,6 @@ object Extractors8 extends App {
   }
 
 
-  import scala.math._
-
-  /**
-    *
-    * @param n numerator fenzi
-    * @param d denominator fenmu
-    */
   class Fraction(n: Int, d: Int) {
     private val num: Int = if (d == 0) 1 else n * sign(d) / gcd(n, d);
     private val den: Int = if (d == 0) 0 else d * sign(d) / gcd(n, d);
@@ -210,7 +212,7 @@ object Extractors8 extends App {
     def sign(a: Int) = if (a > 0) 1
     else if (a < 0) -1 else 0
 
-    def gcd(a: Int, b: Int): Int = if (b == 0) abs(a) else gcd(b, a % b)
+    def gcd(a: Int, b: Int): Int = if (b == 0) scala.math.abs(a) else gcd(b, a % b)
 
     def *(other: Fraction) = new Fraction(num * other.num, den * other.den)
   }
@@ -226,10 +228,6 @@ object Extractors8 extends App {
   }
 
   object Name {
-    //    def unapply(input: String): Option[(String, String)] = {
-    //      val pos = input.indexOf(" ")
-    //      if (pos == -1) None else Some((input.substring(0, pos), input.substring(pos + 1)))
-    //    }
     def unapply(arg: String): Option[(String, String)] = {
       if (arg.isEmpty) {
         None
@@ -238,14 +236,16 @@ object Extractors8 extends App {
         Some(split(0), split(1))
       }
     }
+
+    def unapply(f: Fraction): Option[(String, String)] = {
+      Some("good","boy")
+    }
   }
 
 }
 
-//BK 11.9 Extractors with One or No Arguments •
+//BK 11.9 Extractors with One or No Arguments
 object ExtractorsWithOneOrNoArguments9 extends App {
-
-
   //eg1: practice case class the one argument
   case class Dog(name: String)
 
@@ -260,22 +260,27 @@ object ExtractorsWithOneOrNoArguments9 extends App {
 
   //eg2:my own one argument
 
-  val Number(n) = "1729"
+  val Number(n) = "1729s"
 
   object Number {
     def unapply(input: String): Option[Int] = try {
       Some(Integer.parseInt(input.trim))
     } catch {
-      case ex: NumberFormatException => None
+      case ex: NumberFormatException => Some(1) // If here return None, will throw exception.
+      case ex: RuntimeException => Some(2)
+      case ex => Some(3)
     }
   }
+  
+  println(n)
 
   //eg3: my own no argument
 
   val author = "Peter van der Linden"
   author match {
-    case Name(first, last@IsCompound()) =>  print(last.split("\\s+").length) // Matches if the author is Peter van der Linden
-//    case Name(first, last) => 1;print(last)
+    case Name(first, last) if (last.contains(" ")) => print(last)// The same as following, used boolean -unapply method.
+    case Name(first, last@IsCompound()) =>  print(last) // Matches if the author is Peter van der Linden
+    case Name(first, last) => 1;print(last)
   }
 
 
