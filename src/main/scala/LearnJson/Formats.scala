@@ -13,12 +13,12 @@ object Formats extends App {
 
   
   import net.liftweb.json._
-//  implicit val formats = net.liftweb.json.DefaultFormats
-  implicit val formats = new DefaultFormats {
-    override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  implicit val formats = net.liftweb.json.DefaultFormats
+//  implicit val formats = new DefaultFormats {
+//    override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 //    dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-    dateFormatter.setTimeZone(new GregorianCalendar().getTimeZone)
-  }
+//    dateFormatter.setTimeZone(new GregorianCalendar().getTimeZone())
+//  }
 //  formats.setTimeZone(new GregorianCalendar().getTimeZone)
 //  formats.setTimeZone(new GregorianCalendar().getTimeZone)
 
@@ -53,6 +53,9 @@ object Formats extends App {
 //    protected def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 //  }
   val OBPDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+  println(OBPDateFormat.getTimeZone)
+  OBPDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+  println(OBPDateFormat.getTimeZone)
   val MfDateFormat = new SimpleDateFormat("yyyyMMdd")
   val MfDateFormat2 = new SimpleDateFormat("yyyyMMdd'T'HH:mm:ss.SSS'Z'")
 
@@ -85,7 +88,7 @@ object Formats extends App {
     backendMessages= List(InternalCaseClass("text")),
     owners= List(""),
     number = 1,
-    date =OBPDateFormat.parse("1990-08-10T00:00:00.000Z")
+    date = OBPDateFormat.parse("1990-08-10T00:00:00.000Z")
   )
   logger.info("1"+outCaseClass.toString)
 
