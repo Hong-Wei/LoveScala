@@ -1,7 +1,7 @@
 //In scala, you don't have to give a name to each function, just like you don't
 //have to give a name to each number.
-3 * (_: Double)
-(x: Double) => 3 * x
+(x: Double) => 3 * x // == 3 * (_: Double)
+
 // store it in a variable. 
 val tripleVarible: (Double) => Double = (x: Double) => 3 * x
 // or define a function

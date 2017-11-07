@@ -46,15 +46,46 @@ object UsefulHighOrderFunctions extends App {
 }
 
 //BK 12.6 Closures
+//“An object is data with functions. 
+// A closure is a function with data.” — John D. Cook
+//已知一个函数  f( x ) = x + i  ，让你求  f（3） = 3+i。
+//分析：要得到最终的函数值，你必须知道i的值。i称作开放项（“开”着的，对应闭包的“闭”），若上文中定义了“ inti = 1”，
+//则可以得到f（3） = 3+1 =4, 即函数值若想被创建必须捕获i的值，这一过程可以被理解为做对函数执行“关闭”操作，所以叫闭包。
+//
+//链接：https://www.zhihu.com/question/28849447/answer/42339956
+
+//闭包出现是因为lexical scope，闭包是由函数和环境组成，Scala应该支持函数作为参数或返回值，这时如果没有闭包，那么函数的free 变量就会出错
+
+
+//https://zhuanlan.zhihu.com/p/21346046
+//Closures are functions that refer to independent (free) variables (variables that are used locally, 
+// but defined in an enclosing scope). In other words, 
+// the function defined in the closure 'remembers' the environment in which it was created.
+
 object Closures6 extends App {
   def mulBy(factor: Double) = (x: Double) => factor * x
 
   // each of the returned functions has its own setting for factor : Closures consists of code together with variables
   val triple = mulBy(3)
+  //3*x
   // implemented as objects of a class ,with an instance variable factor and apply method
-  val half = mulBy(0.5)
+  val half = mulBy(0.5) //0.5*x
   // can access nonlocal variables: each functions has its own setting for factor
+  // when call triple(14)--> in mulBy factory = 3, this is only inside the method, but here we store the data for this function.
+  // when call half(14)--> in mulBy factory = 0.5, this is only inside the method, but here we store the data for this function.
   println(triple(14) + " " + half(14))
+
+  // Such a function is called a closure. 
+  // A closure consists of code together with the definitions of any nonlocal variables that the code uses.
+  //These functions are actually implemented as objects of a class, with an instance variable factor and an apply method that contains the body of the function
+  // val triple = mulBy(3) --> 
+  //  object triple {
+  //    val factor = 3
+  //    apply(a: Int)={
+  //      3*a
+  //    }
+  //  }
+  // The function can save some data 
 }
 
 //BK 12.7 SAM Conversions
@@ -84,7 +115,7 @@ object SAMConversion7 extends App {
 }
 
 //bk 12.8 Currying
-//use currying for a function parameter so that the type inferencer has more information.
+//use currying for a function parameter so that the type inference has more information.
 object Curring8 extends App {
   //eg1: process -> turning a function two arguments into a function takes one argument
   def mul(x: Int, y: Int) = x * y
@@ -102,7 +133,10 @@ object Curring8 extends App {
   val a = Array("Hello", "World")
   val b = Array("hello", "world")
   private val corresponds: Boolean = a.corresponds(b)((s: String, s1: String) => s.equalsIgnoreCase(s1))
-  //  print(corresponds)
+  // because you can get the String Type from `a.corresponds(b)`--> 
+  // So there is no need to write the up sentences. 
+  a.corresponds(b)(_.equalsIgnoreCase(_))
+  
 }
 
 //BK 12.9 Control Abstractions
@@ -180,9 +214,9 @@ object ReturnExpresseion10 extends App{
     -1
   }
 
-  indexOf("Hello", 'l')
+  println(indexOf("Hello", 'l'))
 
-  indexOf("Hello", '!')
+  println(indexOf("Hello", '!'))
 
   val a=5
 
