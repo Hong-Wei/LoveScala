@@ -1,12 +1,9 @@
 package myImpatient
 
-//import impatient.ch14.sec09._
-//import myImpatient.CaseClasses.Currency
-
 import scala.collection.immutable.IndexedSeq
 
 /**
-  * Created by zhanghongwei on 14/11/16. I just want to test it . I add something in develop branch !
+  * Created by zhanghongwei on 14/11/16.
   */
 object Chapter14 extends App {
   //bk 14.1 A Better Switch
@@ -14,12 +11,14 @@ object Chapter14 extends App {
   var honwei = "Hongwei"
   var sign = 0
   var ch = '*'
-  private val Unit1: Unit = ch match {
+  private val abc = ch match {
     case '+' => sign = 1
     case '-' => sign = -1
-    case _ => sign = 0 // if no ,scala.MatchError
+    case _ => sign = 0
   }
 
+  println("hongwei"+abc)
+  println("hongwei"+sign)
 
 //  for {
 //    1 <- 1 to 10
@@ -65,28 +64,29 @@ object Chapter14 extends App {
   import scala.math._
 
   var x = Pi
-  x match {
+  println("hongwei2")
+  println(x match {
     case Pi => print(Pi)
     case x => print(2)
   }
-  println()
+  )
   //BK14.4 Type Patterns
   //  much better than the following code:
-  //  for (obj <- Array(42, "42", BigInt(42), BigInt, 42.0, Chapter14, Map("Hongwei" -> 28), Map(12 -> 12))) {
-  //    val result = obj match {
-  //      case x: Int => x
-  //      case s: String => Integer.parseInt(s)
-  //      case _: BigInt => Int.MaxValue
-  //      case BigInt => -1
-  //      case x: Double => x
-  //      case Chapter14 => Chapter14.honwei = "500"; Chapter14.honwei
-  //      case m: Map[_, _] => m // use a generic map
-  //      case m: Map[String, Int] => m
-  //      case m: Map[Int, Int] => m // generic types are eraed , not useful!!!
-  //      case _ => 0
-  //    }
-  //    println(result)
-  //  }
+    for (obj <- Array(42, "42", BigInt(42), BigInt, 42.0, Chapter14, Map("Hongwei" -> 28), Map(12 -> 12))) {
+      val result = obj match {
+        case x: Int => x
+        case s: String => Integer.parseInt(s)
+        case _: BigInt => Int.MaxValue
+        case BigInt => -1 // BigInt is the object, only when you input object BigInt, here make sense 
+        case x: Double => x
+        case Chapter14 => Chapter14.honwei = "500"; Chapter14.honwei
+        case m: Map[_, _] => m // use a generic map
+        case m: Map[Int, Int] => m // generic types are erased , not useful!!!
+        case m: Map[String, Int] => m //  generic types are erased , not useful!!!
+        case _ => 0
+      }
+      println(result)
+    }
 
   //  if (p.isInstanceOf[Employee]) {
   //    val s = p.asInstanceOf[Employee] // s has type Employee
@@ -97,41 +97,42 @@ object Chapter14 extends App {
   // you can match a generic map:
   //  case m:Map[]=>   ...
 
+  println("bk 14.5 Matching Arrays, Lists, and Tuples")
   //bk 14.5 Matching Arrays, Lists, and Tuples
-  //  for (arr <- Array(Array(0), Array(1, 0),Array(1, 0,0), Array(0, 1, 0),Array(0, 1, 1,1,11,1), Array(1, 1, 0))) {
-  //
-  //    val result = arr match {
-  //      case Array(0) => arr.mkString
-  //      case Array(x, y) => arr.mkString
-  //      case Array(0, _*) => arr.mkString
-  //      case Array(1,1, _*) => arr.mkString
-  //      case _ => "something else"
-  //    }
-  //
-  //    println(result)
-  //  }
+    for (arr <- Array(Array(0), Array(1, 0),Array(1, 0,0), Array(0, 1, 0),Array(0, 1, 1,1,11,1), Array(1, 1, 0))) {
 
-  //  for (lst <- Array(List(0), List(1, 0), List(0, 0, 0), List(1, 0, 0))) {
-  //
-  //    val result = lst match {
-  //      case 0 :: Nil => "0"
-  //      case x :: y :: Nil => x + " " + y
-  //      case 0 :: tail => "0 ..."
-  //      case _ => "something else"
-  //    }
-  //
-  //    println(result)
-  //  }
-  //
-  //  for (pair <- Array((0, 1,1,1), (1, 0), (1, 1),(0,0))) {
-  //    val result = pair match {
-  //      case (0, _) => "0 ..."
-  //      case (y, 0) => y + " 0"
-  //      case _ => "neither is 0"
-  //    }
-  //
-  //    println(result)
-  //  }
+      val result = arr match {
+        case Array(0) => arr.mkString
+        case Array(x, y) => arr.mkString
+        case Array(0, _*) => arr.mkString
+        case Array(1,1, _*) => arr.mkString
+        case _ => "something else"
+      }
+
+      println(result)
+    }
+
+    for (lst <- Array(List(0), List(1, 0), List(0, 0, 0), List(1, 0, 0))) {
+
+      val result = lst match {
+        case 0 :: Nil => "0"
+        case x :: y :: Nil => x + " " + y
+        case 0 :: tail => "0 ..."
+        case _ => "something else"
+      }
+
+      println(result)
+    }
+
+    for (pair <- Array((0, 1,1,1), (1, 0), (1, 1),(0,0))) {
+      val result = pair match {
+        case (0, _) => "0 ..."
+        case (y, 0) => y + " 0"
+        case _ => "neither is 0"
+      }
+
+      println(result)
+    }
 
   //BK 14.6 Extractors
   //1 unapply -> numbers of objects
@@ -163,16 +164,21 @@ object Chapter14 extends App {
   val Array(first, second, _*) = arr1
 
   //BK 14.8 Patterns in for Expressions
-  //  import scala.collection.JavaConversions.propertiesAsScalaMap
-  //  // Converts Java Properties to a Scala map—just to get an interesting example
-  //  for ((k, v) <- System.getProperties())
-  //    println(k + " -> " + v)
-  //
-  //  for ((k, "") <- System.getProperties())// match failures are silently ignored
-  //    println(k)
-  //
-  //  for ((k, v) <- System.getProperties() if v == "") // can also use a guard
-  //    println(k)
+    import scala.collection.JavaConversions.propertiesAsScalaMap
+    // Converts Java Properties to a Scala map—just to get an interesting example
+  println("""1111(k,v)""")
+    for ((k, v) <- System.getProperties())
+      println(k + " -> " + v)
+
+
+    println("""222222(k,"")""")
+    for ((k, "") <- System.getProperties())// match failures are silently ignored
+      println(k)
+
+
+  println("""333(k,v)""")
+    for ((k, v) <- System.getProperties() if v == "") // can also use a guard
+      println(k)
 
 
 
@@ -194,12 +200,17 @@ object Chapter14 extends App {
 object CaseClasses extends App{
   abstract class Amount
 
+  //Normal class, not the case class
   class MyMoney(value: Double) extends Amount
 
+  // because of it is the normal class, so you need implement the apply and unapply method.
   object MyMoney extends Amount {
     def apply(value: Double): MyMoney = new MyMoney(value)
-
     def unapply(arg: MyMoney): Option[Double] = Option(2.4)
+//    override def toString =""
+//    override def equals =true
+//    override def hashCode =1
+//    override def copy =""
   }
 
   case class Dollar(value: Double) extends Amount{
@@ -219,18 +230,14 @@ object CaseClasses extends App{
     // Note that amt is printed nicely, thanks to the generated toString
     println(amt + ": " + result)
   }
+  
+//bk 14.10 The copy Method and Named Parameters
   var currency = Currency(1.2,"hognwe")
   private val copy: Currency = currency.copy(currency.value)
   val a = 5
 }
-//bk 14.11 Infix Notation in case Clauses
-object InfixNotationInCaseClauses extends App {
 
-}
-//bk 14.12 Matching Nested Structures
-object MatchingNestedStructures extends App{
-
-}
+//bk 14.13 Are Case Classes Evil?
 
 //bk 14.14 Sealed Classes
 //All subclasses of a sealed class must be defined in the same file as the class itself.
