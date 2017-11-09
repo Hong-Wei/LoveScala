@@ -123,7 +123,7 @@ object MultipleBounds177 extends App {
 // T <:< U --> T is a subtype of U
 // T <%< U --> T is view-convertible to U
 // you need “implicit evidence parameter"
-object ManifestContextBounds178 extends App {
+object `Type Constraints178` extends App {
 
   //eg 1
   class MyPair[T](val first: T, val second: T)(implicit ev: T <:< Ordered[T]) {}
