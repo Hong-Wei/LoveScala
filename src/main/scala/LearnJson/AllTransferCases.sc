@@ -38,22 +38,13 @@ val twoCaseClass: InternalCaseClass = InternalCaseClass("text")
 val classToJValue: JValue = Extraction.decompose(twoCaseClass)
 
 //2 JValue -->String
-//2.1 JValue -->Document first.
-val jValueToDocument: scala.text.Document = render(classToJValue)
-//2.2 Document-->String
-val documnetToStringCompact: String = compact(jValueToDocument)
-val documnetToStringPretty: String = pretty(jValueToDocument)
-
-//2.1 and 2.2 one way:
 val jValueToStringCompact: String = compactRender(classToJValue)
 
 
-
-
-//3.0 String --> JValue
+//3 String --> JValue
 val stringToJValue: JValue = parse(jValueToStringCompact)
 
-//4.0 JValue --> Case Class
+//4 JValue --> Case Class
 val jvalueToCaseClass: InBoundCaseClass = Extraction.extract[InBoundCaseClass](stringToJValue)
 val jvalueToCaseClass2: InBoundCaseClass = Extraction.extract[InBoundCaseClass](parse("{\n  \"1\":\"2\"\n}"))
 val jvalueToCaseClass3 = Extraction.extractOpt(parse("{\n  \"1\":\"2\"\n}"))//[InBoundCaseClass2]

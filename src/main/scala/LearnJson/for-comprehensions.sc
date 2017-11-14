@@ -1,7 +1,7 @@
 import net.liftweb.json.JsonAST.JValue
-import net.liftweb.json._
+import net.liftweb.json.{JValue, _}
 
-val json = parse(
+val json: JValue = parse(
   s"""
   {
     "name": "joe",
@@ -19,7 +19,10 @@ val json = parse(
   """.stripMargin
 )
 
-for {JField("age", JInt(age)) <- json} yield age
+for {
+  JObject(age) <- json
+  JField("name", JString(joe)) <- age
+} yield joe
 
 for {
   JObject(child) <- json
@@ -30,7 +33,6 @@ for {
 
 
 // my own test.
-
 val myJson: JValue = parse(
   s"""
   {
@@ -62,15 +64,20 @@ val myJson: JValue = parse(
 )
 
 
-val value = for {JField("counterparty_id", JString(age)) <- myJson} yield age
+val value = for {
+  JObject(child) <- myJson
+  JField("counterparty_id", JString(counterparty_id)) <- child
+} 
+  yield 
+    counterparty_id
 
-//val values = value.toString
+value
 
-for {
-  JField("counterparty_id", JString(counterparty_id)) <- myJson
-  JField("is_beneficiary", JBool(is_beneficiary)) <- myJson
-  JField("key", JString(key)) <- myJson
-} yield (counterparty_id,is_beneficiary,key)
+//for {
+//  JField("counterparty_id", JString(counterparty_id)) <- myJson
+//  JField("is_beneficiary", JBool(is_beneficiary)) <- myJson
+//  JField("key", JString(key)) <- myJson
+//} yield (counterparty_id,is_beneficiary,key)
 
 
 //TODO why the following code do not work??

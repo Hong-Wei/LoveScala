@@ -9,7 +9,7 @@ resolvers += Resolver.sonatypeRepo("releases")
 resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases"
 
 libraryDependencies ++= {
-  val liftVersion = "2.6-RC1"
+  val liftVersion = "3.1.0"
   Seq(
 //    scala core
     "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5",

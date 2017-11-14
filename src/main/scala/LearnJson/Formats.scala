@@ -97,7 +97,7 @@ object Formats extends App {
 
 //  //2 JValue -->String
   //2.1 JValue -->Document first.
-  val jValueToDocument: scala.text.Document = render(classToJValue)
+  val jValueToDocument: String = compactRender(classToJValue)
   //2.2 Document-->String
 //  val documnetToStringCompact: String = compact(jValueToDocument)
 //  val documnetToStringPretty: String = pretty(jValueToDocument)
@@ -118,7 +118,7 @@ object Formats extends App {
 //  val jvalueToCaseClass3 = Extraction.extractOpt(parse("{\n  \"1\":\"2\"\n}"))//[InBoundCaseClass2]
 //
 
-  //5.0 Case Class --> APp
+  //5.0 Case Class --> App
   val classToJValue51: JValue = Extraction.decompose(outCaseClass)(formats)
   val jValueToStringCompact52: String = compactRender(classToJValue)
   logger.info("5"+jValueToStringCompact52)
