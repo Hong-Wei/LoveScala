@@ -1,0 +1,50 @@
+{
+  "authInfo": {
+    "userId": "",
+    "username": "N7jut8d",
+    "cbsToken": ">,?          81433020102612",
+    "isFirst": true
+  },
+  "data": {
+    "errorCode": "",
+    "backendMessages": [
+      {
+        "source": "ESB",
+        "status": "Success",
+        "errorCode": "0",
+        "text": "OK"
+      },
+      {
+        "source": "MF",
+        "status": "Success",
+        "errorCode": "0",
+        "text": "OK"
+      }
+    ],
+    "transactionRequests": [
+      {
+        "id": null,
+        "type": null,
+        "from": null,
+        "details": null,
+        "transaction_ids": null,
+        "status": null,
+        "start_date": null,
+        "end_date": null,
+        "challenge": null,
+        "charge": null,
+        "charge_policy": null,
+        "counterparty_id": null,
+        "name": null,
+        "this_bank_id": null,
+        "this_account_id": null,
+        "this_view_id": null,
+        "other_account_routing_scheme": null,
+        "other_account_routing_address": null,
+        "other_bank_routing_scheme": null,
+        "other_bank_routing_address": null,
+        "is_beneficiary": false
+      }
+    ]
+  }
+}

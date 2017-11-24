@@ -9,6 +9,7 @@ case class InternalCaseClass(
 
 case class OutBoundCaseClass(
                               cbsToken: String,
+                              jValue : JValue,
                               backendMessages: List[InternalCaseClass],
                               owners: List[String],
                               Number: BigDecimal
@@ -23,19 +24,20 @@ case class InBoundCaseClass(
                             )
 
 case class InBoundCaseClass2(
-                             oneMore: String,
-                             cbsToken: Option[String],
+                             oneMore: Option[String],
+                             jValue : JValue,
+                             cbsToken: String,
                              backendMessages: List[InternalCaseClass],
                              owners: List[String]
                            )
 
 
-var oneCaseClass: OutBoundCaseClass = OutBoundCaseClass("cbsToken", List(InternalCaseClass("text")), List(""),BigDecimal(1))
+var oneCaseClass: OutBoundCaseClass = OutBoundCaseClass(null, null,Nil, List(""),BigDecimal(1))
 val twoCaseClass: InternalCaseClass = InternalCaseClass("text")
 
 
 //1case class -->JValue
-val classToJValue: JValue = Extraction.decompose(twoCaseClass)
+val classToJValue: JValue = Extraction.decompose(oneCaseClass)
 
 //2 JValue -->String
 val jValueToStringCompact: String = compactRender(classToJValue)
@@ -46,6 +48,7 @@ val stringToJValue: JValue = parse(jValueToStringCompact)
 
 //4 JValue --> Case Class
 val jvalueToCaseClass: InBoundCaseClass = Extraction.extract[InBoundCaseClass](stringToJValue)
+val jvalueToCaseClass12: InBoundCaseClass2 = Extraction.extract[InBoundCaseClass2](stringToJValue)
 val jvalueToCaseClass2: InBoundCaseClass = Extraction.extract[InBoundCaseClass](parse("{\n  \"1\":\"2\"\n}"))
 val jvalueToCaseClass3 = Extraction.extractOpt(parse("{\n  \"1\":\"2\"\n}"))//[InBoundCaseClass2]
 

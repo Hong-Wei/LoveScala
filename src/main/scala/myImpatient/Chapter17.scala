@@ -5,29 +5,24 @@ import java.io.File
 /**
   * Created by zhanghongwei on 15/11/16.
   */
-class Chapter17 {
-
-}
-
-//BK 17 Type Parameters 11=257-246
+//BK 17 Type Parameters
 object Chapter17 extends App {
 
   //BK 17.1 Generic Classes
-  ////  class Pair[T, S](val first: T, val second: S) {}
-  //
-  //  // variable ,parameter and return value
-  ////  Pair[Int, String]
-  //  // ordinary class
-  //  //infer actual types
-  //  val p = new Pair(28, "Hongwei")
-  //  // you can specify the types
-  //  val p2 = new Pair[Any, Any](42, "String")
+    class Pair[T, S](val first: T, val second: S) {}
+
+    // variable ,parameter and return value
+    // ordinary class
+    //infer actual types
+    val p: Pair[Int, String] = new Pair(28, "Hongwei")
+    // you can specify the types
+    val p2: Pair[Any, Any] = new Pair[Any, Any](42, "String")
 
   //BK 17.2 Generic Functions
-  //  def getMiddle[T](a: Array[T]): T = a(a.length / 2)
-  //  // infer the types
-  //  getMiddle(Array("Mary","had","a","little","lamb"))
-  //  val f = getMiddle[String] _
+    def getMiddle[T](a: Array[T]): T = a(a.length / 2)
+    // infer the types
+    private val middle: String = getMiddle(Array("Mary","had","a","little","lamb"))
+    val f: (Array[String]) => String = getMiddle[String] _
 
   //BK 17.3 Bounds for Type Variables
   //  //  place restrictions on type variables
