@@ -1,32 +1,22 @@
-// These are meant to be typed into the REPL. You can also run
-// scala -Xnojline < repl-session.scala to run them all at once.
-
-abstract class Item
-case class Article(description: String, price: Double) extends Item
-case class Bundle(description: String, discount: Double, items: Item*) extends Item
-
-val special = Bundle("Father's day special", 20.0,
-  Article("Scala for the Impatient", 39.95),
-  Bundle("Anchor Distillery Sampler", 10.0,
-    Article("Old Potrero Straight Rye Whiskey", 79.95),
-    Article("Junípero Gin", 32.95)))
-
-special match {
-  case Bundle(_, _, Article(descr, _), _*) => descr
+trait Doctrait {
+  def getDog: String
 }
 
-special match {
-  case Bundle(_, _, art @ Article(_, _), rest @ _*) => (art, rest)
+case class MyDog(
+                  getDog: String
+                ) extends Doctrait
+
+
+case class MyDog2(
+                  getDog: String,
+                  newDog:String
+                )  extends Doctrait{
+  val newFilst: String=newDog
 }
 
-special match {
-  case Bundle(_, _, art @ Article(_, _), rest) => (art, rest)
-}
 
-def price(it: Item): Double = it match {
-  case Article(_, p) => p
-  case Bundle(_, disc, its @ _*) => its.map(price _).sum - disc
-}
 
-price(special)
+val dog = MyDog2("ongwei","Lulu")
 
+dog.getDog
+dog.newFilst
