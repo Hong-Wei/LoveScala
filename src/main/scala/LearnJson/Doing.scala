@@ -12,6 +12,10 @@ import scala.collection.immutable.List
   */
 object Doing extends App {
 
+  case class OutBoundCaseClass(
+    date: Date,
+    dateString: String
+  )
 
 }
 

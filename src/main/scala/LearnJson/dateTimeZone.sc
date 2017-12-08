@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.TimeZone
 
 
-val mydate= "19901128"
+val mydate= "20160201"
 val defaultFilterFormat: SimpleDateFormat = new SimpleDateFormat("yyyyMMdd")
 
 val simpleTransactionDateFormat = new SimpleDateFormat("yyyyMMdd")
