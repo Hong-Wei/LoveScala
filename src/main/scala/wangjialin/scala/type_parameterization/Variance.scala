@@ -12,7 +12,7 @@ package wangjialin.scala.type_parameterization
 class Person
 class Student extends Person
 class C[+T](val args: T)
-class S[+T](arg : T) extends C[T](arg)
+class S[T](arg : T) extends C[T](arg)
 trait Friend[-T]{
   def makeFriend(somebody: T)
 }
@@ -22,8 +22,8 @@ object Variance {
   def main(args: Array[String]) {
     val value : C[Person] = new C[Student](new Student)
 
-//    List<? extends Oject> list = new ArrayList<String>()
-    val list : List[_ <: Any] = List[String]("Spark")
+//    List<? extends Oject> list = new ArrayList<String>() --> Java 虽然定义时不支持,variance,但是使用时可以直接表示
+    val list : List[_ <: Any] = List[String]("Spark") //-->scala,也可以在使用时,表达!!!
   }
 
 }
