@@ -1,1 +1,0 @@
-val x = scala.collection.immutable.IndexedSeq(1,2,3)

@@ -1,1 +1,0 @@
-class Holder[T](var data: T)

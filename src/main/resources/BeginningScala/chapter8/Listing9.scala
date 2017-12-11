@@ -1,1 +1,0 @@
-val gs = new Getable("String")

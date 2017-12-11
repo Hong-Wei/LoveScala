@@ -1,1 +1,0 @@
-val st = new A { type B = Traversable[Int] }
