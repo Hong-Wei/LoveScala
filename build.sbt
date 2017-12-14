@@ -2,7 +2,7 @@ name := "LoveScala"
 
 version := "1.0"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.2"
 
 List(webSettings: _*)
 resolvers += Resolver.sonatypeRepo("releases")
@@ -32,6 +32,12 @@ libraryDependencies ++= {
 //    log
     "ch.qos.logback" % "logback-classic" % "1.2.3",
     "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
+    
+    
+    //Learn Http request
+    "net.databinder.dispatch" %% "dispatch-core"   % "0.13.2",
+    "io.spray" %% "spray-client" % "1.3.1",
+    "com.typesafe.play" %% "play-ws" % "2.4.3",
     
 //    tests
     "com.h2database" % "h2" % "1.4.187",

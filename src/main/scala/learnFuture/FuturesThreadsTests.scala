@@ -36,6 +36,13 @@ object FuturesThreadsTests extends App {
     testFuture(i)
     println(s"run testFuture $i")
   }
+
+
+  import scala.concurrent.Future
+
+  val opt: Future[String] = Future("123")
+  //The for will create the new thread for println
+  val Unit1= for (o <- opt) println("xxxxx:"+o)
   
 }
 
