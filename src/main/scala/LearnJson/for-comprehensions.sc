@@ -1,5 +1,8 @@
-import net.liftweb.json.JsonAST.JValue
-import net.liftweb.json.{JValue, _}
+import net.liftweb.common.Full
+import net.liftweb.json.JsonAST.{JString, JValue}
+import net.liftweb.json.{JValue, parse, _}
+
+import scala.collection.mutable.Buffer
 
 val json: JValue = parse(
   s"""
@@ -83,6 +86,32 @@ value
 //TODO why the following code do not work??
 ///Users/zhanghongwei/Documents/GitHub-Tower/OBP-API_Leumi/src/test/scala/code/api/v2_2_0/CreateCounterpartyTest.scala
 
-//for {
-//  JField("counterparty_id", JString(counterparty_id)) <- responsePost.body
-//} yield (counterparty_id)
+myJson.replace(List("counterparty_id"),JString("counterparty_id"))
+
+
+
+myJson findField {
+  case JField(n, v) =>
+    n.contains("_id")
+}
+
+
+myJson filterField {
+  case JField(n,v) if n.contains("_id") =>
+    true
+  case _ =>
+    false
+}
+
+def renameCurrencyToCcy(json: JValue): JValue = json transformField {
+  case JField("counterparty_id", x) => JField("COUNTERPARTYID", x)
+}
+
+def renameCcyToCurrency(json: JValue): JValue = json transformField {
+  case JField("ccy", x) => JField("currency", x)
+}
+
+
+
+
+renameCurrencyToCcy(myJson)
