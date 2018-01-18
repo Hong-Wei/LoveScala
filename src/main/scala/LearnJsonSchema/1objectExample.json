@@ -1,0 +1,27 @@
+//http://json-schema-validator.herokuapp.com/
+
+//schema:
+{
+  "type": "object",
+  "properties": {
+    "number":      { "type": "number" },
+    "street_name": { "type": "string" },
+    "street_type": { "type": "string",
+      "enum": ["Street", "Avenue", "Boulevard"]
+    }
+  }
+}
+
+//data
+//{
+//  "number": 1600,
+//  "street_name": "Pennsylvania",
+//  "street_type": "Avenue"
+//}
+
+//error case -->  instance type (string) does not match any allowed primitive type -->number
+//{
+//  "number": "String",
+//  "street_name": "Pennsylvania",
+//  "street_type": "Avenue"
+//}

@@ -1,0 +1,159 @@
+////http://json-schema-validator.herokuapp.com/
+////
+////schema: Type-specific keywords
+//// --> https://spacetelescope.github.io/understanding-json-schema/index.html
+////string
+////Numeric types
+////object
+////array
+////boolean
+////null
+//{
+//  "type": "object",
+//  "properties": {
+//    "one_string": {
+//      "type": "string"
+//    },
+//    "string_array": {
+//      "type": "array",
+//      "items": {
+//        "type": "string"
+//      }
+//    },
+//    "one_date": {
+//      "type": "string",
+//      "format": "date-time"
+//    },
+//    "one_boolean": {
+//      "type": "boolean"
+//    },
+//    "one_integer": {
+//      "type": "integer"
+//    },
+//    "object_array": {
+//      "type": "array",
+//      "items": {
+//        "type": "object",
+//        "properties": {
+//          "one_string": {
+//            "type": "string"
+//          },
+//          "one_boolean": {
+//            "type": "boolean"
+//          }
+//        }
+//      },
+//      "one_null": {
+//        "type": "null"
+//      },
+//      "one_object": {
+//        "type": "object",
+//        "properties": {
+//          "one_string": {
+//            "type": "string"
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+////////data
+////{
+////  "one_string": "Pennsylvania",
+////  "one_date": "2013-01-21T23:08:00Z",
+////  "one_boolean": true,
+////  "one_integer": 123,
+////  "one_array":[1,2,3],
+////  "one_null":null,
+////  "one_object":{"one_string":"123"}
+////}
+//
+//
+
+
+{
+  "type":"object",
+  "properties":{
+    "jvalues":{
+      "type":"array",
+      "properties":{
+        "obj":{
+          "type":"object",
+          "properties":{}
+        }
+      }
+
+    },
+    "ints":{
+      "type":"array",
+      "items":{
+        "type":"integer"
+      }
+    },
+    "string":{
+      "type":"string"
+    },
+
+    "jvalue":{
+      "type":"object",
+      "properties":{
+        "obj":{
+          "type":"object",
+          "properties":{}
+        }
+      }
+    },
+    "boolean":{
+      "type":"boolean"
+    },
+    "dates":{
+      "type":"array"
+    },
+    "date":{
+      "type":"string",
+      "format":"date-time"
+    },
+    "strings":{
+      "type":"array",
+      "items":{
+        "type":"string"
+      }
+    },
+    "nestClasses":{
+      "type":"array",
+      "items":{
+        "type": "object",
+        "properties": {
+          "strings":{
+            "type":"array",
+            "items":{
+              "type":"string"
+            }
+          },
+          "string":{
+            "type":"string"
+          }
+        }
+      }},
+    "nestClass":{
+      "type":"object",
+      "properties":{
+        "strings":{
+          "type":"array",
+          "items":{
+            "type":"string"
+          }
+        },
+        "string":{
+          "type":"string"
+        }
+      }
+    },
+    "int":{
+      "type":"integer"
+    },
+    "booleans":{
+      "type":"array"
+    }
+  }
+}
