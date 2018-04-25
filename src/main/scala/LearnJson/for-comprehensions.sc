@@ -67,14 +67,14 @@ val myJson: JValue = parse(
 )
 
 
-val value = for {
+val value: List[String] = for {
   JObject(child) <- myJson
   JField("counterparty_id", JString(counterparty_id)) <- child
+  counterparty_id1<- counterparty_id
 } 
   yield 
     counterparty_id
 
-value
 
 //for {
 //  JField("counterparty_id", JString(counterparty_id)) <- myJson

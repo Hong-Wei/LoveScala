@@ -1,83 +1,57 @@
-import java.text.SimpleDateFormat
-import java.util.{Date, TimeZone}
-
 import net.liftweb.json._
 
+import scala.collection.immutable.List
+
 implicit val formats = net.liftweb.json.DefaultFormats
-//  implicit val formats = new DefaultFormats {
-//    override def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//    dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"))
-//    dateFormatter.setTimeZone(new GregorianCalendar().getTimeZone())
-//  }
-//  formats.setTimeZone(new GregorianCalendar().getTimeZone)
-//  formats.setTimeZone(new GregorianCalendar().getTimeZone)
 
-//
-//  val formats: SimpleDateFormat = {
-//    val simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-//    simpleDateFormat
-//  }
+trait links
+case class Balances(balances: String) extends links
+case class Transactions(trasactions: String) extends links
+case class ViewAccount(viewAccount: String) extends links
 
-//  implicit val formats: Formats = new Formats {
-//
-//    import java.text.{ParseException, SimpleDateFormat}
-//
-//    val dateFormat = new DateFormat {
-//      def parse(s: String) = try {
-//        Some(formatter.parse(s))
-//      } catch {
-//        case e: ParseException => None
-//      }
-//
-//      def format(d: Date) = formatter.format(d)
-//
-//      private def formatter = {
-//        val f = dateFormatter
-////        f.setTimeZone(new GregorianCalendar().getTimeZone)
-//        f.setTimeZone(TimeZone.getTimeZone("UTC"))
-//        f
-//      }
-//    }
-//
-//    protected def dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//  }
-val OBPDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-//OBPDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-
-val date1 = OBPDateFormat.parse("1990-08-10T00:00:00.000Z")
-
-
-case class OutBoundCaseClass(
-  date: Date,
-  dateString: String
+case class CoreAccountJsonV1(
+  id: String,
+  iban: String,
+  currency: String,
+  accountType: String,
+  cashAccountType: String,
+//  _links: List[links],
+  name: String
 )
 
-case class InBoundCaseClass(
-  date: Date,
-  dateString: String
-)
+case class CoreAccountsJsonV1(`account-list`: List[CoreAccountJsonV1])
 
-var outBoundCaseClass = OutBoundCaseClass(
-  date = date1,
-  dateString = ""
+val coreAccountJson_v1 = CoreAccountJsonV1(
+  id = "3dc3d5b3-7023-4848-9853-f5400a64e80f",
+  iban = "DE2310010010123456789",
+  currency = "EUR",
+  accountType = "Girokonto",
+  cashAccountType = "CurrentAccount",
+//  _links = List(
+//    Balances("/v1/accounts/3dc3d5b3-7023-4848-9853-f5400a64e80f/balances"),
+//    Transactions("/v1/accounts/3dc3d5b3-7023-4848-9853-f5400a64e80f/transactions")),
+  name = "Main Account"
 )
+val coreAccountsJsonV1 = CoreAccountsJsonV1(List(coreAccountJson_v1))
+
+var oneCaseClass = coreAccountsJsonV1
+//val twoCaseClass:  = InternalCaseClass("text")
+
 
 //1case class -->JValue
-val classToJValue: JValue = Extraction.decompose(outBoundCaseClass)(formats)
+val classToJValue: JValue = Extraction.decompose(oneCaseClass)
 
 //2 JValue -->String
-val jValueToString: String = compactRender(classToJValue)
+val jValueToStringCompact: String = compactRender(classToJValue)
+
 
 //3 String --> JValue
-val stringToJValue: JValue = parse(jValueToString)
+val stringToJValue: JValue = parse(jValueToStringCompact)
 
 //4 JValue --> Case Class
-val jvalueToCaseClass: InBoundCaseClass = Extraction.extract[InBoundCaseClass](stringToJValue)
-
-//5 Case Class --> App
-val classToJValue51: JValue = Extraction.decompose(outBoundCaseClass)(formats)
-val jValueToStringCompact52: String = compactRender(classToJValue)
-
+val jvalueToCaseClass = Extraction.extract[CoreAccountJsonV1](stringToJValue)
+//val jvalueToCaseClass12: InBoundCaseClass2 = Extraction.extract[InBoundCaseClass2](stringToJValue)
+//val jvalueToCaseClass2: InBoundCaseClass = Extraction.extract[InBoundCaseClass](parse("{\n  \"1\":\"2\"\n}"))
+//val jvalueToCaseClass3 = Extraction.extractOpt(parse("{\n  \"1\":\"2\"\n}"))//[InBoundCaseClass2]
 
 
