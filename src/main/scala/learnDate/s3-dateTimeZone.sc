@@ -88,10 +88,12 @@ val timeZoneId2: TimeZone = TimeZone.getTimeZone("UTC")
 val theUKStandarString = "2017-04-05T10:43:07+00:00"
 val theUKStandarDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX")
 theUKStandarDateTimeFormat.getTimeZone
-theUKStandarDateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT+0000"))
+//theUKStandarDateTimeFormat.setTimeZone(TimeZone.getTimeZone("GMT+0000"))
+//theUKStandarDateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+theUKStandarDateTimeFormat.getTimeZone
 val theUKDateObject = theUKStandarDateTimeFormat.parse(theUKStandarString)
-theUKStandarDateTimeFormat.getTimeZone.getDisplayName(true, TimeZone.LONG)
-theUKStandarDateTimeFormat.applyPattern("yyyy-MM-dd'T'HH:mm:ssXX")
+//theUKStandarDateTimeFormat.getTimeZone.getDisplayName(true, TimeZone.LONG)
+//theUKStandarDateTimeFormat.applyPattern("yyyy-MM-dd'T'HH:mm:ssXX")
 
 val UKStardarString = theUKStandarDateTimeFormat.format(theUKDateObject) // 2018-04-25T09:17:22+02:00
 //https://stackoverflow.com/questions/27920239/jodatime-datetime-with-0000-instead-z
@@ -106,9 +108,4 @@ formatTestLenient.parse("03/11/2013 asfasf") //correct
 
 formatTestLenient.setLenient(true)
 formatTestLenient.parse("03/11/2013 asfasf") //throw exception
-
-DateTimeFormatter.ofPattern("MM/dd/yyyy")
-
-
-
 
