@@ -325,34 +325,3 @@ object Option16 extends App {
   //  s match { case Full(myS) => println(myS); case _ => println(“not found”) }
 
 
-}
-
-//bk 14.17 Partial Functions
-// A set of case clauses enclosed in braces is a partial function
-// A function which may not be defined for all inputs.
-object PartialFunctions17 extends App {
-
-  //eg1:
-  private val intToStringToFunction: ((Int) => String) => PartialFunction[Int, String] = PartialFunction[Int, String]
-  private val println1: Unit = println()
-
-  val f: PartialFunction[Char, Int] = {
-    case '+' => 1;
-    case '-' => -1
-  }
-  private val f1: Int = f('-')
-  private val at1: Boolean = f.isDefinedAt('-')
-  private val at: Boolean = f.isDefinedAt('*')
-  //  f('0') // Match Error
-
-  //eg2:accept a PartialFunction as a parameter
-  private val collect: IndexedSeq[Int] = "-3+4".collect { case '+' => 1; case '-' => -1 }
-  println(collect)
-  private val collect1: IndexedSeq[Int] = "-3+4".collect {
-    f
-  }
-  println(collect1)
-
-}
-
-
