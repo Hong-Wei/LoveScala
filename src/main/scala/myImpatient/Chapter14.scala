@@ -1,7 +1,5 @@
 package myImpatient
 
-import scala.collection.immutable.IndexedSeq
-
 /**
   * Created by zhanghongwei on 14/11/16.
   */
@@ -323,5 +321,5 @@ object Option16 extends App {
   //  val myString: String = s openOr “(none)”
   //  val fail = s ?~ “Opening the box failed”
   //  s match { case Full(myS) => println(myS); case _ => println(“not found”) }
-
+}
 
