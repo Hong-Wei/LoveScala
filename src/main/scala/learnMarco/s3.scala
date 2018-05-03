@@ -1,0 +1,1 @@
+//http://www.bbartosz.com/blog/2016/01/23/scala-macros-part-1/
