@@ -2,6 +2,10 @@
 // Extracting one value
 // Extractor is just implicit of the unapply method.
 // It will call the default unapply method, and give the value to it.
+// constructor: val a = User("hongwei") ==> you create the object from the paramters
+// extractor : val User(name) = a; not work, only in pattern matching .
+
+
 
 trait User {
   def name: String
@@ -22,11 +26,11 @@ object PremiumUser {
 val unapplyFreeUser: Option[String] = FreeUser.unapply(new FreeUser("Daniel"))
 
 val user: User = new PremiumUser("Daniel")
-user match {
+//This method is accept a User object, and return the filed name from the object.
+def ExtractorMethod(user: User): String = user match {
   case FreeUser(name) => "Hello " + name
   case PremiumUser(name) => "Welcome back, dear " + name
 }
-
 
 
 

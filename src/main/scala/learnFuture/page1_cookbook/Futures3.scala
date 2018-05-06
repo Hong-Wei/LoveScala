@@ -6,6 +6,23 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
+
+
+object Futures3_Sequence extends App {
+
+  println("before for-comprehension")
+  val result: Future[Int] = for {
+    r1 <- Cloud.runAlgorithm(10)
+    r2 <- Cloud.runAlgorithm(20)
+    r3 <- Cloud.runAlgorithm(30)
+  } yield (r1 + r2 + r3)
+
+
+  println("before sleep at the end")
+  sleep(2000) // important: keep the jvm alive
+}
+
+
 object Futures3 extends App {
   println("starting futures")
   val result1 = Cloud.runAlgorithm(10)

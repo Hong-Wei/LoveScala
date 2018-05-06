@@ -15,6 +15,7 @@ taxcut.success(TaxCut(20)) //Promise instance is no longer writable.
 
 import concurrent.Future
 import concurrent.ExecutionContext.Implicits.global
+//We design a Future from the Promise, and finish the success method in the promise.
 def redeemCampaignPledge(): Future[TaxCut] = {
   val p = Promise[TaxCut]()
   Future {
@@ -34,4 +35,18 @@ taxCutF.onComplete {
     println(s"A miracle! They really cut our taxes by $reduction percentage points!")
   case Failure(ex) =>
     println(s"They broke their promises! Again! Because of a ${ex.getMessage}")
+}
+
+
+//Breaking Promises like a sir
+case class LameExcuse(msg: String) extends Exception(msg)
+def redeemCampaignPledge2(): Future[TaxCut] = {
+  val p = Promise[TaxCut]()
+  Future {
+    println("Starting the new legislative period.")
+    Thread.sleep(2000)
+    p.failure(LameExcuse("global economy crisis"))
+    println("We didn't fulfill our promises, but surely they'll understand.")
+  }
+  p.future
 }

@@ -1,9 +1,6 @@
 //http://josephguan.github.io/2016/06/26/thread-in-future/
 package learnFuture
 
-import scala.concurrent.Future
-import scala.util.{Failure, Success}
-
 object FuturesThreadsTests extends App {
 
   import java.util.concurrent.Executors
