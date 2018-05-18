@@ -16,4 +16,6 @@ object s2 extends App {
   val classPerson = ru.typeOf[Person].typeSymbol.asClass
   val cm = m.reflectClass(classPerson)
 
+  
+  def getName(a: String)(implicit  b: String) =a
 }

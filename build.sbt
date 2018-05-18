@@ -42,7 +42,20 @@ libraryDependencies ++= {
 //    tests
     "com.h2database" % "h2" % "1.4.187",
     "org.scalactic" %% "scalactic" % "3.0.1",
-    "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test",
+    
+    //cache
+    // https://mvnrepository.com/artifact/com.github.cb372/scalacache-core
+    "com.github.cb372" %% "scalacache-core" % "0.3.0",
+    "com.github.cb372" %% "scalacache-guava" % "0.24.1",
+    "com.github.cb372" %% "scalacache-memcached" % "0.24.1",
+    "com.github.cb372" %% "scalacache-ehcache" % "0.24.1",
+    "com.github.cb372" %% "scalacache-redis" % "0.24.1",
+    "com.github.cb372" %% "scalacache-caffeine" % "0.24.1",
+    "com.github.cb372" %% "scalacache-cache2k" % "0.24.1",
+    "com.github.cb372" %% "scalacache-ohc" % "0.24.1"
+
+
   )
 }
 

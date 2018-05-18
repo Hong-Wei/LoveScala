@@ -1,27 +1,9 @@
-import scala.reflect.runtime.universe._
+import net.liftweb.common.{Box, Full}
+import net.liftweb.util.Helpers.{tryo, _}
 
-class Foo {
- def currentMethodName() : String = Thread.currentThread.getStackTrace()(2).getMethodName
- 
- def foo(s: String, i: Int) = s * i
-
- def getMeASammy(a: String) = {
-  val a = typeOf[Foo].member(TermName(currentMethodName())).asMethod.paramLists.head
-  
-  
-  println(a ) 
-  println(currentMethodName()) 
- 
- }
+val box: Box[Int] = for{
+  b <- tryo{1/0} ?~!"hongwei"
+  a <- Some(1)
+} yield{
+  a
 }
-
-val params = typeOf[Foo].member(TermName("foo")).asMethod.paramLists.head
-val params2 = typeOf[Foo].member(TermName("getMeASammy")).asMethod.paramLists.head
-
-params.map(_.typeSignature.typeSymbol) 
-
-typeOf[Foo].members.getClass
-
-new Foo().getMeASammy("hng")
-
-this.getClass.getName
