@@ -2,5 +2,5 @@
 #db.url=jdbc:mysql://localhost:3306/obp-mapped?user=root&password=f&serverTimezone=UTC&nullNamePatternMatchesAll=true
 
 
-cache.implementation = guava
-#cache.implementation = redis
+#cache.implementation = guava
+cache.implementation = redis

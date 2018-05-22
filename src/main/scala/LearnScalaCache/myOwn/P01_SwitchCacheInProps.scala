@@ -1,19 +1,18 @@
-package LearnScalaCache
+package LearnScalaCache.myOwn
 
 import com.typesafe.scalalogging.Logger
 import net.liftweb.common.{Box, Full}
 import net.liftweb.util.Props
 
 
+//BK 1 switch cache with the props between GuavaCache and Redis
 object P01_SwitchCacheInProps extends App {
-  val logger = Logger("P2_Modes")
+  val logger = Logger("P01_SwitchCacheInProps")
 
-  //BK 1 switch cache with the props between GuavaCache and Redis
   
-  //1 make GuavaCache work
+  import scalacache._
   import scalacache.guava._
   import scalacache.memoization.memoizeSync
-  import scalacache._
   import scalacache.modes.sync._
   import scalacache.redis._
   import scalacache.serialization.binary._
@@ -25,7 +24,7 @@ object P01_SwitchCacheInProps extends App {
   
   val cacheImplementation: Box[String] = Props.get("cache.implementation")
   
-  implicit val scalaCache = cacheImplementation match {
+  implicit val scalaCache: Cache[String] = cacheImplementation match {
     case Full(value) if value.toLowerCase == "redis" =>
       redisCache 
     case Full(value) if value.toLowerCase == "in-memory" =>

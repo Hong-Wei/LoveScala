@@ -53,8 +53,12 @@ libraryDependencies ++= {
     "com.github.cb372" %% "scalacache-redis" % "0.24.1",
     "com.github.cb372" %% "scalacache-caffeine" % "0.24.1",
     "com.github.cb372" %% "scalacache-cache2k" % "0.24.1",
-    "com.github.cb372" %% "scalacache-ohc" % "0.24.1"
-
+    "com.github.cb372" %% "scalacache-ohc" % "0.24.1",
+    
+    
+    //serialation 
+    "com.twitter" %% "chill-akka" % "0.9.2",
+    "com.twitter" %% "chill-bijection" % "0.9.2"
 
   )
 }
