@@ -58,7 +58,10 @@ libraryDependencies ++= {
     
     //serialation 
     "com.twitter" %% "chill-akka" % "0.9.2",
-    "com.twitter" %% "chill-bijection" % "0.9.2"
+    "com.twitter" %% "chill-bijection" % "0.9.2", 
+    
+    //scalameta
+    "org.scalameta" %% "scalameta" % "3.7.3"//
 
   )
 }
