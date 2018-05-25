@@ -28,6 +28,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-stream" % "2.5.4", // or whatever the latest version is
     "com.typesafe.akka" %% "akka-actor" % "2.5.4", // or whatever the latest version is
     "com.typesafe.akka" %% "akka-slf4j" % "2.5.4",
+    "com.typesafe.akka" %% "akka-testkit" % "2.5.4",
 
 //    log
     "ch.qos.logback" % "logback-classic" % "1.2.3",
