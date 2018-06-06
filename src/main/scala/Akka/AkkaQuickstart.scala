@@ -91,3 +91,4 @@ object AkkaQuickstart extends App {
   goodDayGreeter ! WhoToGreet("Play")
   goodDayGreeter ! Greet
 }
+
