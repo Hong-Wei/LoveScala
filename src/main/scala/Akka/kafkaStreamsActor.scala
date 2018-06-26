@@ -46,17 +46,17 @@ class ABC extends App {
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
 
-  val db = new DB
-  db.loadOffset().foreach { fromOffset =>
-    val partition = 0
-    val subscription = Subscriptions.assignmentWithOffset(
-      new TopicPartition("topic1", partition) -> fromOffset
-    )
-    val done: CompletionStage[Done] =
-      Consumer.plainSource(consumerSettings, subscription)
-        .mapAsync(1)(db.save)
-        .runWith(Sink.ignore)
-  }
+//  val db = new DB
+//  db.loadOffset().foreach { fromOffset =>
+//    val partition = 0
+//    val subscription = Subscriptions.assignmentWithOffset(
+//      new TopicPartition("topic1", partition) -> fromOffset
+//    )
+//    val done: CompletionStage[Done] =
+//      Consumer.plainSource(consumerSettings, subscription)
+//        .mapAsync(1)(db.save)
+//        .runWith(Sink.ignore)
+//  }
 
 //    val db = new DB
 //    db.loadOffset().foreach { fromLongTime =>
