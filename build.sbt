@@ -69,6 +69,8 @@ libraryDependencies ++= {
   )
 }
 
+WsdlKeys.wsdlUrls in Compile += url("http://www.webxml.com.cn/WebServices/IpAddressSearchWebService.asmx?wsdl")
+
 
 
  

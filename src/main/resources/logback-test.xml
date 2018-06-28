@@ -2,7 +2,17 @@
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>[%-5level]  [%d{HH:mm:ss}] %thread [%c] - %m%n</pattern>
+      <pattern>%d{HH:mm:ss.SSS} [%-5level][%thread][%c]-%msg%n</pattern>
+      <!--<pattern>%d{HH:mm:ss.SSS} [%-5level][%thread][%c{100}.%M\(%line\)]-%msg%n</pattern>-->
+      <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M\(%line\) - %msg%n</pattern>-->
+      <!--
+      2018-06-27 22:47:08.415 
+      [testSystem-akka.actor.default-dispatcher-4] 
+      INFO  
+      akka.actor.RepointableActorRef.apply$mcV$sp(80) 
+      - Message [java.lang.String] without sender to Actor[akka://testSystem/user/first-actor#2077787712] was not delivered. [1] dead letters encountered. This logging can be turned off or adjusted with configuration settings 'akka.log-dead-letters' and 'akka.log-dead-letters-during-shutdown'.
+      -->
+
     </encoder>
   </appender>
 

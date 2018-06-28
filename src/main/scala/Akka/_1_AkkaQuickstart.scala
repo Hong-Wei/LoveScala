@@ -1,6 +1,6 @@
-package Akka
-
 //https://developer.lightbend.com/guides/akka-quickstart-scala/full-example.html
+
+package Akka
 import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem, Props }
 
 object Greeter {
@@ -9,6 +9,7 @@ object Greeter {
   case object Greet
 }
 
+//Greeter Actor, when construct, need the reference of printerActor. 
 class Greeter(message: String, printerActor: ActorRef) extends Actor {
   import Greeter._
   import Printer._
