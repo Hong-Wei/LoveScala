@@ -3,7 +3,7 @@
  */
 package Akka.tutorial_6
 
-import akka.actor.{Actor, ActorLogging, ActorRef, Props, Terminated}
+import akka.actor.{Actor, ActorLogging, ActorRef, Cancellable, Props, Terminated}
 
 import scala.concurrent.duration._
 
@@ -29,7 +29,7 @@ class DeviceGroupQuery(
 ) extends Actor with ActorLogging {
   import DeviceGroupQuery._
   import context.dispatcher
-  val queryTimeoutTimer = context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
+  val queryTimeoutTimer: Cancellable = context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
 
   override def preStart(): Unit = {
     actorToDeviceId.keysIterator.foreach { deviceActor =>

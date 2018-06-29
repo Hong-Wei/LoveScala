@@ -31,8 +31,8 @@ val user: User = new FreeUser("Daniel", 2500, 0.8d)
 
 user match {
     //@ --> bind the value that is matched to a variable,
-    // you do not really have the need to extract paramters from a data structure against which you want to match.
-    // instead, you jsut do a simple boolean check.
+    // you do not really have the need to extract parameters from a data structure against which you want to match.
+    // instead, you just do a simple boolean check.
     // The third and the last of the available `unappply` comes in handy. 
     // allow to bind the value that is matched to a variable, too. -->
     // because of premiumCandidate3.unapply extract the User, so user variable is a User Object

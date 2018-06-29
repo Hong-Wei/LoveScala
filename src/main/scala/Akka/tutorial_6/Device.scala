@@ -26,9 +26,11 @@ class Device(groupId: String, deviceId: String) extends Actor with ActorLogging 
   override def postStop(): Unit = log.info("Device actor {}-{} stopped", groupId, deviceId)
 
   override def receive: Receive = {
+    //Tell this Device register to the DeviceManager, only if it is the same groupId and deveiceId in construct, than register it. 
     case DeviceManager.RequestTrackDevice(`groupId`, `deviceId`) =>
       sender() ! DeviceManager.DeviceRegistered
-
+      
+    //The same message as up one, but this variable is different!  This one only log, no return any message back!!
     case DeviceManager.RequestTrackDevice(groupId, deviceId) =>
       log.warning(
         "Ignoring TrackDevice request for {}-{}.This actor is responsible for {}-{}.",

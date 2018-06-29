@@ -27,9 +27,9 @@ object DeviceGroup {
 }
 
 class DeviceGroup(groupId: String) extends Actor with ActorLogging {
-  var deviceIdToActor = Map.empty[String, ActorRef]
-  var actorToDeviceId = Map.empty[ActorRef, String]
-  var nextCollectionId = 0L
+  var deviceIdToActor: Map[String, ActorRef] = Map.empty
+  var actorToDeviceId: Map[ActorRef, String] = Map.empty
+  var nextCollectionId: Long = 0L
 
   override def preStart(): Unit = log.info("DeviceGroup {} started", groupId)
 
@@ -40,11 +40,17 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
     case trackMsg @ RequestTrackDevice(`groupId`, _) =>
       deviceIdToActor.get(trackMsg.deviceId) match {
         case Some(ref) =>
-          ref forward trackMsg
+          ref forward trackMsg // forward != !, forward will use the orignial sender
         case None =>
           log.info("Creating device actor for {}", trackMsg.deviceId)
           val deviceActor = context.actorOf(Device.props(groupId, trackMsg.deviceId), "device-" + trackMsg.deviceId)
+          
+          //Unlike supervision, watching is not limited to parent-child relationships, 
+          // any actor can watch any other actor as long as it knows the ActorRef.
+          // After a watched actor stops, the watcher receives a Terminated(actorRef) 
+          // message which also contains the reference to the watched actor.
           context.watch(deviceActor)
+          
           deviceActor forward trackMsg
           deviceIdToActor += trackMsg.deviceId -> deviceActor
           actorToDeviceId += deviceActor -> trackMsg.deviceId
@@ -58,7 +64,8 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
 
     case RequestDeviceList(requestId) =>
       sender() ! ReplyDeviceList(requestId, deviceIdToActor.keySet)
-
+      
+      //After a watched actor stops, the watcher receives a Terminated(actorRef)
     case Terminated(deviceActor) =>
       val deviceId = actorToDeviceId(deviceActor)
       log.info("Device actor for {} has been terminated", deviceId)
@@ -66,12 +73,14 @@ class DeviceGroup(groupId: String) extends Actor with ActorLogging {
       deviceIdToActor -= deviceId
 
     case RequestAllTemperatures(requestId) =>
-      context.actorOf(DeviceGroupQuery.props(
-        actorToDeviceId = actorToDeviceId,
-        requestId = requestId,
-        requester = sender(),
-        3.seconds
-      ))
+      context.actorOf(
+        DeviceGroupQuery.props(
+          actorToDeviceId = actorToDeviceId,
+          requestId = requestId,
+          requester = sender(),
+          3.seconds
+        )
+      )
   }
 
 }

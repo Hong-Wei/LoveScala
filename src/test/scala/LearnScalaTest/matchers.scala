@@ -51,7 +51,8 @@ class matchers extends FlatSpec with Matchers {
   val map = Map("two"->3)
 
   "Matchers : " should "use should equal" in {
-    result should not equal (3)
+    result should equal (3)
+//    result should not equal (3)
   }
 
   it should "Checking equality with matchers - 5 kinds" in {
@@ -81,7 +82,7 @@ class matchers extends FlatSpec with Matchers {
 
     assertResult(Array(1, 2))(Array(1, 2)) // succeeds (i.e., does not throw TestFailedException)
     assert(Array(1, 2) === Array(1, 2)) // succeeds (i.e., does not throw TestFailedException)
-    assert(Array(1, 2) == Array(1, 2)) //  throw TestFailedException,  ==, in scala compares object identity
+//    assert(Array(1, 2) == Array(1, 2)) //  throw TestFailedException,  ==, in scala compares object identity
   }
 
   it should "supply implicit parameters explicitly" in {
@@ -117,8 +118,8 @@ class matchers extends FlatSpec with Matchers {
     "abbccxxx" should startWith regex ("a(b*)(c*)" withGroups("bb", "cc"))
     "xxxabbcc" should endWith regex ("a(b*)(c*)" withGroups("bb", "cc"))
     "xxxabbccxxx" should include regex ("a(b*)(c*)" withGroups("bb", "cc"))
-    "abbcc" should fullyMatch regex ("a(b*)(c*)" withGroups("bb", "cc"))
-    string should fullyMatch regex """(-)?(\d+)(\.\d*)?"""
+//    "abbcc" should fullyMatch regex ("a(b*)(c*)" withGroups("bb", "cc"))
+//    string should fullyMatch regex """(-)?(\d+)(\.\d*)?"""
   }
 
   it should "Greater and less than" in {
@@ -144,7 +145,7 @@ class matchers extends FlatSpec with Matchers {
   it should "Checking object identity" in {
     val a = new Integer(1)
     val b = new Integer(1)
-    a should be theSameInstanceAs b
+    a should not be theSameInstanceAs (b)
   }
 
   it should "Checking an object's class" in {

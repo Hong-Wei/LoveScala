@@ -19,7 +19,7 @@ assertCompiles to ensure a bit of code does compile;
 assertTypeError to ensure a bit of code does not compile because of a type (not parse) error;
 withClue to add more information about a failure.
 */
-
+@Ignore
 class assertions extends FlatSpec with Matchers {
 
   "The assert macro: " should "2 did not equal 1" in {

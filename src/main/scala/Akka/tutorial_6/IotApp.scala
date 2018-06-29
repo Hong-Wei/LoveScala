@@ -4,7 +4,7 @@
 package Akka.tutorial_6
 
 import Akka.tutorial_6.DeviceManager.RequestTrackDevice
-import akka.actor.ActorSystem
+import akka.actor.{ActorRef, ActorSystem}
 
 import scala.io.StdIn
 
@@ -15,9 +15,10 @@ object IotApp {
 
     try {
       // Create top level supervisor
-      val supervisor = system.actorOf(DeviceManager.props(), "iot-supervisor")
+      val supervisor: ActorRef = system.actorOf(DeviceManager.props(), "iot-supervisor")
 
       supervisor ! RequestTrackDevice("mygroup", "device1")
+      
 
       // Exit the system after ENTER is pressed
       StdIn.readLine()

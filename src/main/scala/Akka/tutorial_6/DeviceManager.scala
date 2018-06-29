@@ -4,12 +4,13 @@
 
 package Akka.tutorial_6
 
-import Akka.tutorial_6.DeviceManager.RequestTrackDevice
+import Akka.tutorial_6.DeviceManager.{DeviceRegistered, RequestTrackDevice}
 import akka.actor.{Actor, ActorLogging, ActorRef, Props, Terminated}
 
 object DeviceManager {
   def props(): Props = Props(new DeviceManager)
 
+  // Registration Requests 
   final case class RequestTrackDevice(groupId: String, deviceId: String)
   case object DeviceRegistered
 }
@@ -23,7 +24,9 @@ class DeviceManager extends Actor with ActorLogging {
   override def postStop(): Unit = log.info("DeviceManager stopped")
 
   override def receive = {
-    case trackMsg @ RequestTrackDevice(groupId, _) =>
+    //@ --> bind the value that is matched to a variable. If not @, trackMsg is a `Any`. 
+    // Now it will be a RequestTrackDevice variable
+    case trackMsg @ RequestTrackDevice(groupId, _) =>  
       groupIdToActor.get(groupId) match {
         case Some(ref) =>
           ref forward trackMsg
@@ -42,6 +45,10 @@ class DeviceManager extends Actor with ActorLogging {
       actorToGroupId -= groupActor
       groupIdToActor -= groupId
 
+      
+      
+    case DeviceRegistered =>
+      log.info("Get This message")
   }
 
 }
