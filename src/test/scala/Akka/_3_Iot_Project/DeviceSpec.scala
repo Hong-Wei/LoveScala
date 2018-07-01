@@ -1,4 +1,4 @@
-package Akka.tutorial_6
+package Akka._3_Iot_Project
 
 import akka.actor.ActorSystem
 import akka.testkit.{TestKit, TestProbe}

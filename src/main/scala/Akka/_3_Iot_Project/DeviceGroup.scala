@@ -1,10 +1,10 @@
 /**
  * Copyright (C) 2009-2017 Lightbend Inc. <http://www.lightbend.com>
  */
-package Akka.tutorial_6
+package Akka._3_Iot_Project
 
-import Akka.tutorial_6.DeviceGroup._
-import Akka.tutorial_6.DeviceManager.RequestTrackDevice
+import Akka._3_Iot_Project.DeviceGroup._
+import Akka._3_Iot_Project.DeviceManager.RequestTrackDevice
 import akka.actor.{Actor, ActorLogging, ActorRef, Props, Terminated}
 
 import scala.concurrent.duration._

@@ -1,6 +1,6 @@
 //https://doc.akka.io/docs/akka/current/actors.html#defining-an-actor-class
 
-package Akka.Actors
+package Akka._4_Actors_Chapter
 
 import com.typesafe.scalalogging.StrictLogging
 

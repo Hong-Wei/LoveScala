@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
 
 
-object s1 extends App {
+object _s1 extends App {
 
 // val a: String = List(1, 2, 3).asInstanceOf[String]
 
