@@ -39,4 +39,6 @@ object s1 extends App {
  
  List(1).asInstanceOf[List[String]]
  List("Hongwei").asInstanceOf[List[Int]]
+  
+  println(Runtime.getRuntime.availableProcessors)
 }
