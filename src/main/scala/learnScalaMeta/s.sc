@@ -1,1 +1,4 @@
-import scala.meta._
+def a = "hongwei".asInstanceOf[Int]
+
+
+a

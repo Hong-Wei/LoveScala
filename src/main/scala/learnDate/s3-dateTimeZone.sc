@@ -7,7 +7,7 @@
 import java.text.{DateFormat, SimpleDateFormat}
 import java.time.format.DateTimeFormatter
 import java.util.{Date, TimeZone}
-
+//TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
 
 
 //1 dateFormat 
@@ -34,10 +34,10 @@ val p9 = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZZZZ"
 val p10 = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 val p11 = "yyyy-MM-dd'T'HH:mm:ss.SSSXX"
 val p12 = "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-val p14 = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+val p14 = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 val p13 = "YYYY-'W'ww-u"
 
-val pf1 =new SimpleDateFormat(p1).format(myDateObject) 
+val pf1 =new SimpleDateFormat(p1).format(myDateObject)
 val pf2 =new SimpleDateFormat(p2).format(myDateObject) 
 val pf3 =new SimpleDateFormat(p3).format(myDateObject) 
 val pf4 =new SimpleDateFormat(p4).format(myDateObject) 
@@ -59,7 +59,8 @@ myOwnDateFormat.format(myDateObject)
 
 
 //1.2 parse : String --> Date
-val local= myOwnDateFormat.parse(myDateString)
+val localDate: Date = myOwnDateFormat.parse(myDateString)
+val localDateTimeLong = localDate.getTime
 
 
 
@@ -68,9 +69,9 @@ val local= myOwnDateFormat.parse(myDateString)
 //2 date timeZone
 //2.1 setTimeZone you can set it for 
 val differentZone = new SimpleDateFormat("yyyyMMdd")
-differentZone.setTimeZone(TimeZone.getTimeZone("UTC"))
-val utc = differentZone.parse(myDateString)
-
+differentZone.setTimeZone(TimeZone.getTimeZone("America/New_York"))
+val differentZoneDate: Date = differentZone.parse(myDateString)
+val differentZoneDateTimeLong = differentZoneDate.getTime
 myOwnDateFormat.getTimeZone
 differentZone.getTimeZone
 val timeZoneId = TimeZone.getTimeZone("GMT-8").getID()
