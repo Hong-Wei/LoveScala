@@ -64,7 +64,8 @@ libraryDependencies ++= {
     "com.twitter" %% "chill-bijection" % "0.9.2", 
     
     //scalameta
-    "org.scalameta" %% "scalameta" % "3.7.3"//
+    "org.scalameta" %% "scalameta" % "3.7.3",
+    "org.scalameta" %% "contrib" % "3.7.4"
 
   )
 }

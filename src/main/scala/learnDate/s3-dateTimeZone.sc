@@ -65,7 +65,7 @@ val localDateTimeLong = localDate.getTime
 
 
 
-
+ 
 //2 date timeZone
 //2.1 setTimeZone you can set it for 
 val differentZone = new SimpleDateFormat("yyyyMMdd")
